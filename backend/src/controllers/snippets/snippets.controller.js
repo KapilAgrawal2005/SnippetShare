@@ -161,3 +161,31 @@ export const getUserSnippets = asyncHandler(async (req, res) => {
     res.status(500).json({ message: "Internal Server Error." });
   }
 });
+
+export const getSnippetsById = asyncHandler(async (req, res) => {
+  try {
+    const snippetId = req.params.id;
+    const userId = req.user._id;
+
+    if (!userId) {
+      return res.status(400).json({ message: "Not Authorized! Please Login." });
+    }
+
+    const snippet = await SnippetsModel.findById({ snippetId, userId });
+
+    if (!snippet) {
+      return res.status(404).json({ message: "Snippet not found." });
+    }
+
+    await snippet.populate("tags", "name");
+    await snippet.populate("user", "_id name photo");
+
+    return res.status(200).json({
+      message: "Snippet retrieved successfully.",
+      snippet,
+    });
+  } catch (error) {
+    console.error("Error in getSnippetsById:", error);
+    res.status(500).json({ message: "Internal Server Error." });
+  }
+});
