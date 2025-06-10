@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import slugify from "slugify";
 const snippetSchema = new mongoose.Schema(
   {
     title: {
@@ -62,13 +62,53 @@ const snippetSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    user:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    }
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );
+
+// pre middleware to esure the slug is unique
+
+snippetSchema.pre("save", async function (next) {
+  try {
+    if (!this.slug) {
+      // generate the slug using slugify
+      this.slug = slugify(this.title, {
+        lower: true,
+        strict: true,
+        replacement: "-",
+      });
+    }
+
+    // ensure the slug is unique
+    let isSlugExists = await mongoose.models.Snippets.findOne({
+      slug: this.slug,
+    });
+
+    let counter = 1;
+
+    while (isSlugExists) {
+      this.slug = `${
+        (this.title,
+        {
+          lower: true,
+          strict: true,
+          replacement: "-",
+        })
+      }-${counter}`;
+      isSlugExists = await mongoose.models.Snippets.findOne({
+        slug: this.slug,
+      });
+      counter++;
+    }
+  } catch (error) {
+    console.log("Error in generating the slug: ", error);
+    return next(error);
+  }
+});
 
 export default mongoose.model("Snippets", snippetSchema);
