@@ -2,7 +2,7 @@
 import { useUserContext } from "@/context/userContext";
 import useRedirect from "@/hooks/useUserRedirect";
 import { useState } from "react";
-import ChangePasswordForm from "./Components/auth/ChangePasswordForm/ChangePasswordForm";
+import ChangePasswordForm from "@/components/auth/ChangePasswordForm/ChangePasswordForm";
 
 export default function Home() {
   useRedirect("/login");
@@ -27,7 +27,7 @@ export default function Home() {
   };
 
   return (
-    <main className="py-[2rem] mx-[10rem]">
+    <main className="py-[2rem] mx-[10rem] bg-[#181818]">
       <header className="flex justify-between">
         <h1 className="text-[2rem] font-bold">
           Welcome <span className="text-red-600">{name}</span>

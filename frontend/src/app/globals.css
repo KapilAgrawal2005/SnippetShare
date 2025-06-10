@@ -1,8 +1,32 @@
 @import "tailwindcss";
 
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color--bg-0: #fbfbfd;
+  --color--bg-1: #252525;
+  --color--bg-2: #212121;
+  --color--bg-3: #181818;
+  --color--bg-4: #1a1a1a;
+  --color--bg-5: #0f1217;
+  --color--green-light: #27ae60;
+  --color--green-dark: #dbe1e8;
+  --color--grey-0: #f8f8f8;
+  --color--grey-0: #dbe1e8;
+  --color--grey-1: #b2becd;
+  --color--grey-2: #6c7983;
+  --color--grey-3: #454e56;
+  --color--grey-4: #2a2e35;
+  --color--grey-5: #12181b;
+  --color--rgba-0: rgba(255, 255, 255, 0.3);
+  --color--rgba-1: rgba(255, 255, 255, 0.2);
+  --color--rgba-2: rgba(255, 255, 255, 0.1);
+  --color--rgba-3: rgba(255, 255, 255, 0.05);
+  --color--rgba-4: rgba(255, 255, 255, 0.02);
 }
 
 @theme inline {
@@ -20,7 +44,121 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color--bg-3);
+  height: 100%;
 }
+
+h1,
+h2,
+h3,
+h4,
+p {
+  @apply text-base text-gray-300;
+}
+
+/* .auth-page {
+  height: 100vh;
+  background: url("../../public/glass-bg.png") no-repeat center center fixed;
+} */
+
+.auth-page form {
+  position: relative;
+  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.auth-page form img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 0.12;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blob {
+  position: absolute;
+  top: 20px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  right: -70px;
+  background-color: rgba(249, 249, 249, 0.35);
+  transition: all 0.4s ease-in-out;
+  opacity: 0.7;
+}
+
+.btn-hover:hover .blob {
+  width: 180px;
+  height: 180px;
+  top: -10px;
+  right: -110px;
+  opacity: 0.5;
+}
+
+.active-nav-item {
+  position: relative;
+  background-color: var(--color--rgba-3);
+}
+
+.active-nav-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--color--rgba-0);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.sidebar-nav-item {
+  position: relative;
+}
+
+.sidebar-nav-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: var(--color--rgba-4);
+  transition: width 0.3s ease-in-out;
+}
+
+.sidebar-nav-item:hover::after {
+  width: 100%;
+}
+
+.tag-item {
+  transition: all 0.3s ease-in-out;
+}
+.tag-item:hover {
+  box-shadow: 0px 4px 0px var(--color--grey-4);
+}
+
+.active-dot {
+  position: relative;
+}
+.active-dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
+  background-color: #7263f3;
+  border-radius: 50%;
+}
+
+.u-shadow-1 {
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.u-shadow-2 {
+  box-shadow: rgba(0, 0, 0, 0.17) 3px 3px 10px;
+}/*# sourceMappingURL=globals.css.map */

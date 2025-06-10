@@ -1,7 +1,6 @@
 "use client";
 import { useUserContext } from "@/context/userContext";
 import React from "react";
-// import flurry from "../../../../../public/flurry.png"; // Adjust the path as necessary
 function LoginForm() {
   const { loginUser, userState, handlerUserInput } = useUserContext();
   const { email, password } = userState;
@@ -82,7 +81,6 @@ function LoginForm() {
           </button>
         </div>
       </div>
-      {/* <img src="../" alt="" /> */}
     </form>
   );
 }
