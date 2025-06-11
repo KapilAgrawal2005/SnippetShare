@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import UserProvider from "@/providers/UserProvider";
 import { Toaster } from "react-hot-toast";
+import Header from "@/components/header/header";
+import ContentProvider from "@/providers/ContentProvider";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +32,13 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Toaster position="top-center" />
-        <UserProvider>{children}</UserProvider>
+        <NextTopLoader showSpinner={false} color="#7263F3" height={2} />
+        <UserProvider>
+          <div className="h-full">
+            <Header />
+            <ContentProvider>{children}</ContentProvider>
+          </div>
+        </UserProvider>
       </body>
     </html>
   );
