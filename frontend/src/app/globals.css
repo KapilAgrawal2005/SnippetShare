@@ -44,7 +44,7 @@
 }
 
 body {
-  background-color: var(--color--bg-3);
+  background-color: #181818;
   height: 100%;
 }
 
@@ -99,7 +99,7 @@ p {
 
 .active-nav-item {
   position: relative;
-  background-color: var(--color--rgba-3);
+  background-color: #ffffff0d;
 }
 
 .active-nav-item::before {
@@ -109,7 +109,7 @@ p {
   right: 0;
   width: 4px;
   height: 100%;
-  background-color: var(--color--rgba-0);
+  background-color: #ffffff4d;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 }
@@ -125,7 +125,7 @@ p {
   left: 0;
   width: 0;
   height: 100%;
-  background-color: var(--color--rgba-4);
+  background-color: #ffffff05;
   transition: width 0.3s ease-in-out;
 }
 
@@ -137,7 +137,7 @@ p {
   transition: all 0.3s ease-in-out;
 }
 .tag-item:hover {
-  box-shadow: 0px 4px 0px var(--color--grey-4);
+  box-shadow: 0px 4px 0px #ffffff05;
 }
 
 .active-dot {
