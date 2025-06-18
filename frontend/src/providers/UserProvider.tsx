@@ -2,6 +2,7 @@
 import React from "react";
 import { UserContextProvider } from "../context/userContext";
 import { SnippetProvider } from "../context/snippetContext";
+import { GlobalProvider } from "../context/globalContext";
 
 interface Props {
   children: React.ReactNode;
@@ -10,7 +11,9 @@ interface Props {
 function UserProvider({ children }: Props) {
   return (
     <UserContextProvider>
-      <SnippetProvider>{children}</SnippetProvider>
+      <GlobalProvider>
+        <SnippetProvider>{children}</SnippetProvider>
+      </GlobalProvider>
     </UserContextProvider>
   );
 }

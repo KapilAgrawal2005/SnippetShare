@@ -1,12 +1,24 @@
+"use client";
+import React, { useEffect } from "react";
+import { useSnippetContext } from "@/context/snippetContext";
 import { ISnippet } from "@/types/types";
 import { formatDate } from "@/utils/dates";
-import { bookmarkEmpty, copy, edit, heartOutline, trash } from "@/utils/Icons";
-import { useSnippetContext } from "@/context/snippetContext";
+import {
+  bookmarkEmpty,
+  copy,
+  edit,
+  heart,
+  heartOutline,
+  trash,
+} from "@/utils/Icons";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { vs, vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { useUserContext } from "@/context/userContext";
+import { useGlobalContext } from "@/context/globalContext";
+import { useRouter } from "nextjs-toploader/app";
+import toast from "react-hot-toast";
 
 interface Props {
   snippet: ISnippet;
@@ -46,7 +58,7 @@ const languageLogo = (language: string) => {
     case "r":
       return "/logos/r.svg";
     case "ruby":
-      return "/logos/ruby.svg";
+      return "/ruby.svg";
     case "rust":
       return "/logos/rust.svg";
     case "sql":
@@ -60,9 +72,8 @@ const languageLogo = (language: string) => {
   }
 };
 
-const Snippet = ({ snippet, height = "400px" }: Props) => {
-  const codeString = `${snippet?.code}`;
-
+function Snippet({ snippet, height = "400px" }: Props) {
+  const userId = useUserContext().user?._id;
   const {
     useBtnColorMemo,
     useTagColorMemo,
@@ -70,6 +81,41 @@ const Snippet = ({ snippet, height = "400px" }: Props) => {
     likeSnippet,
     getPublicSnippets,
   } = useSnippetContext();
+  const { openModalForEdit } = useGlobalContext();
+
+  const router = useRouter();
+
+  // check if current user has liked the snippet
+  const [isLiked, setIsLiked] = React.useState(
+    snippet.likedBy.includes(userId)
+  );
+  const [likeCount, setLikeCount] = React.useState(snippet.likedBy.length);
+  const [activeTag, setActiveTag] = React.useState<string | null>(null);
+
+  const codeString = `${snippet?.code}`;
+
+  useEffect(() => {
+    if (activeTag) {
+      getPublicSnippets("", activeTag);
+    }
+  }, [activeTag]);
+
+  // handle like/unlike snippet
+  const handleLike = async () => {
+    if (!userId) {
+      return router.push("/login");
+    }
+
+    setIsLiked((prev) => !prev);
+    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+
+    await likeSnippet(snippet._id);
+  };
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(codeString);
+    toast.success("Code copied to clipboard");
+  };
 
   return (
     <div className="shadow-sm flex flex-col border-2 border-rgba-3 rounded-lg">
@@ -104,7 +150,7 @@ const Snippet = ({ snippet, height = "400px" }: Props) => {
           <button
             className="w-10 h-10 rounded-md text-green-400 text-lg flex items-center justify-center"
             style={{ background: useBtnColorMemo }}
-            // onClick={copyToClipboard}
+            onClick={copyToClipboard}
           >
             {copy}
           </button>
@@ -158,7 +204,7 @@ const Snippet = ({ snippet, height = "400px" }: Props) => {
             </Link>
             <p className="pb-1 text-gray-400">{snippet?.description}</p>
           </div>
-          {/* <button
+          <button
             className={`flex flex-col items-center text-2xl text-gray-300 ${
               isLiked ? "text-red-500" : "text-gray-300"
             }`}
@@ -169,9 +215,9 @@ const Snippet = ({ snippet, height = "400px" }: Props) => {
               {likeCount === 0 ? 0 : likeCount}{" "}
               {likeCount === 1 ? "like" : "likes"}
             </span>
-          </button> */}
+          </button>
         </div>
-        {/* <div className="pt-2 pb-3 flex justify-between">
+        <div className="pt-2 pb-3 flex justify-between">
           <ul className="items-start flex gap-2 flex-wrap">
             {snippet?.tags.map((tag) => {
               return (
@@ -204,10 +250,10 @@ const Snippet = ({ snippet, height = "400px" }: Props) => {
               </button>
             </div>
           )}
-        </div> */}
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default Snippet;
