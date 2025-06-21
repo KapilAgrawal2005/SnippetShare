@@ -3,7 +3,6 @@ import Sidebar from "@/components/sidebar/sidebar";
 import { useGlobalContext } from "@/context/globalContext";
 import { usePathname } from "next/navigation";
 import React from "react";
-
 interface Props {
   children: React.ReactNode;
 }

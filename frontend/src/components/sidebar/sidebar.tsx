@@ -86,6 +86,7 @@ const Sidebar = () => {
       >
         {isSidebarOpen ? arrowLeft : bars}
       </span>
+
       <nav className="h-full flex flex-col justify-between">
         <div className="mt-4 flex-1 flex flex-col justify-between">
           <ul>
