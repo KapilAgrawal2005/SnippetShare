@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { vs, vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { useUserContext } from "@/context/userContext";
 import { useGlobalContext } from "@/context/globalContext";
 import { useRouter } from "nextjs-toploader/app";
@@ -81,6 +81,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
     likeSnippet,
     getPublicSnippets,
   } = useSnippetContext();
+
   const { openModalForEdit } = useGlobalContext();
 
   const router = useRouter();
@@ -118,8 +119,8 @@ function Snippet({ snippet, height = "400px" }: Props) {
   };
 
   return (
-    <div className="shadow-sm flex flex-col border-2 border-rgba-3 rounded-lg">
-      <div className="px-6 py-4 bg-4 flex items-center justify-between rounded-t-lg border-b-2 border-rgba-3">
+    <div className="shadow-sm flex flex-col border-2 border-[#ffffff0d] rounded-lg">
+      <div className="px-6 py-4 bg-[#1a1a1a] flex items-center justify-between rounded-t-lg border-b-2 border-[#ffffff0d]">
         <Link
           href={`/user/${snippet?.user?.name
             ?.toLowerCase()
@@ -181,7 +182,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
         </SyntaxHighlighter>
       </div>
 
-      <div className="flex-1 px-6 py-2 bg-4 rounded-b-lg border-t-2 border-rgba-3">
+      <div className="flex-1 px-6 py-2 bg-[#1a1a1a] rounded-b-lg border-t-2 border-[#ffffff0d]">
         <div className="flex justify-between gap-2">
           <div className="flex-1 flex flex-col">
             <Link
@@ -223,7 +224,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
               return (
                 <li
                   key={tag._id}
-                  className="tag-item px-4 py-1 border border-rgba-2 text-gray-300 rounded-md cursor-pointer"
+                  className="tag-item px-4 py-1 border border-[#ffffff1a] text-gray-300 rounded-md cursor-pointer"
                   style={{ background: useTagColorMemo }}
                   onClick={() => setActiveTag(tag._id)}
                 >

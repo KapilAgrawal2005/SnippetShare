@@ -22,11 +22,11 @@
   --color--grey-3: #454e56;
   --color--grey-4: #2a2e35;
   --color--grey-5: #12181b;
-  --color--rgba-0: rgba(255, 255, 255, 0.3);
-  --color--rgba-1: rgba(255, 255, 255, 0.2);
-  --color--rgba-2: rgba(255, 255, 255, 0.1);
-  --color--rgba-3: rgba(255, 255, 255, 0.05);
-  --color--rgba-4: rgba(255, 255, 255, 0.02);
+  --color--rgba-0: rgba(255, 255, 255, 0.3);  /*#ffffff4d*/
+  --color--rgba-1: rgba(255, 255, 255, 0.2);  /*#ffffff33*/
+  --color--rgba-2: rgba(255, 255, 255, 0.1);  /*#ffffff1a*/
+  --color--rgba-3: rgba(255, 255, 255, 0.05); /*#ffffff0d*/
+  --color--rgba-4: rgba(255, 255, 255, 0.02); /*#ffffff05*/
 }
 
 @theme inline {
