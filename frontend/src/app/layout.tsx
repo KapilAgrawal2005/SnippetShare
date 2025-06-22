@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import Header from "@/components/header/header";
 import ContentProvider from "@/providers/ContentProvider";
 import NextTopLoader from "nextjs-toploader";
+import ModalProvider from "@/providers/ModalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         <Toaster position="top-center" />
         <NextTopLoader showSpinner={false} color="#7263F3" height={2} />
         <UserProvider>
+          <ModalProvider/>
           <div className="h-full">
             <Header />
             <ContentProvider>{children}</ContentProvider>
