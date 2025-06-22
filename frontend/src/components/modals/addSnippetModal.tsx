@@ -113,7 +113,7 @@ function AddSnippetModal() {
 
   return (
     <div className="fixed top-0 left-0 z-40 h-full w-full bg-[#000]/30 backdrop-blur-sm bg-opacity-50 overflow-hidden">
-      <div className="py-5 px-6 bg-[#181818] max-w-[920px] w-full flex flex-col gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md">
+      <div className="py-5 px-6 bg-3 max-w-[920px] w-full flex flex-col gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md">
         <form action="" className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <h1 className="text-white text-3xl font-bold">
             {modalMode === "edit-snippet" ? (
@@ -133,16 +133,15 @@ function AddSnippetModal() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Title"
-                className="w-full h-12 px-4 bg-[#252525] text-white rounded-lg"
+                className="w-full h-12 px-4 bg-1 text-white rounded-lg"
               />
             </div>
-
             <div>
               <select
                 name="language"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="w-full h-12 px-4 bg-[#252525] text-white rounded-lg cursor-pointer"
+                className="w-full h-12 px-4 bg-1 text-white rounded-lg cursor-pointer"
               >
                 {languages.map((lang) => {
                   return (
@@ -159,7 +158,7 @@ function AddSnippetModal() {
                 name="isPublic"
                 value={isPublic.toString()}
                 onChange={(e) => setIsPublic(e.target.value === "true")}
-                className="w-full h-12 px-4 bg-[#252525] text-white rounded-lg cursor-pointer"
+                className="w-full h-12 px-4 bg-1 text-white rounded-lg cursor-pointer"
               >
                 <option value="true">Public</option>
                 <option value="false">Private</option>
@@ -173,7 +172,7 @@ function AddSnippetModal() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Description"
-              className="w-full pt-2 px-4 bg-[#252525] text-white rounded-lg"
+              className="w-full pt-2 px-4 bg-1 text-white rounded-lg"
               rows={2}
             ></textarea>
           </div>
@@ -185,35 +184,32 @@ function AddSnippetModal() {
                   name="code"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  className="w-full pt-2 h-[400px] px-4 bg-[#252525] text-white rounded-lg"
+                  className="w-full pt-2 h-[400px] px-4 bg-1 text-white rounded-lg"
                   placeholder="// Code here..."
                 ></textarea>
               </code>
             </pre>
           </div>
-
           <div className="flex flex-wrap gap-4">
-            {tags &&
-              Array.isArray(tags) &&
-              tags.map((tag: ITag, index: number) => {
-                return (
-                  <Button
-                    key={index}
-                    type="button"
-                    className="py-1 text-white text-sm"
-                    style={{
-                      background: activeTags.some((activeTag: any) => {
-                        return activeTag._id === tag._id;
-                      })
-                        ? "#7263f3"
-                        : useTagColorMemo,
-                    }}
-                    onClick={() => handleTags(tag)}
-                  >
-                    {tag.name}
-                  </Button>
-                );
-              })}
+            {tags.map((tag: ITag, index: number) => {
+              return (
+                <Button
+                  key={index}
+                  type="button"
+                  className="py-1 text-white text-sm"
+                  style={{
+                    background: activeTags.some((activeTag: any) => {
+                      return activeTag._id === tag._id;
+                    })
+                      ? "#7263f3"
+                      : useTagColorMemo,
+                  }}
+                  onClick={() => handleTags(tag)}
+                >
+                  {tag.name}
+                </Button>
+              );
+            })}
           </div>
 
           <div className="flex justify-end gap-4">
