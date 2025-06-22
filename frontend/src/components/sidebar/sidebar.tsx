@@ -75,7 +75,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`fixed z-20 bg-[#212121] h-full border-r-[2px] border-[#ffffff0d] ${
+      className={`mt-4 fixed z-20 bg-[#212121] h-full border-r-[2px] border-[#ffffff0d] ${
         isSidebarOpen ? "w-[15rem]" : "w-[5.2rem]"
       }`}
     >
@@ -86,7 +86,6 @@ const Sidebar = () => {
       >
         {isSidebarOpen ? arrowLeft : bars}
       </span>
-
       <nav className="h-full flex flex-col justify-between">
         <div className="mt-4 flex-1 flex flex-col justify-between">
           <ul>
