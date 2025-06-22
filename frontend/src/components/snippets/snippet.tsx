@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useSnippetContext } from "@/context/snippetContext";
-import { ISnippet } from "@/types/types";
+import { ISnippet, ITag } from "@/types/types";
 import { formatDate } from "@/utils/dates";
 import {
   bookmarkEmpty,
@@ -220,7 +220,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
         </div>
         <div className="pt-2 pb-3 flex justify-between">
           <ul className="items-start flex gap-2 flex-wrap">
-            {snippet?.tags.map((tag) => {
+            {snippet?.tags.map((tag: ITag) => {
               return (
                 <li
                   key={tag._id}
