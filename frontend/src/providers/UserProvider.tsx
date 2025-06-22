@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { UserContextProvider } from "../context/userContext";
-import { SnippetProvider } from "../context/snippetContext";
+import { SnippetsProvider } from "../context/snippetContext";
 import { GlobalProvider } from "../context/globalContext";
 
 interface Props {
@@ -12,7 +12,7 @@ function UserProvider({ children }: Props) {
   return (
     <UserContextProvider>
       <GlobalProvider>
-        <SnippetProvider>{children}</SnippetProvider>
+        <SnippetsProvider>{children}</SnippetsProvider>
       </GlobalProvider>
     </UserContextProvider>
   );
