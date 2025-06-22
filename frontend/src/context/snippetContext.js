@@ -30,8 +30,6 @@ export const SnippetsProvider = ({ children }) => {
     try {
       const res = await axios.post(`${serverUrl}/create-snippet`, data);
 
-      setPublicSnippets([res.data, ...publicSnippets]);
-
       getPublicSnippets();
 
       toast.success("Snippet created successfully");
