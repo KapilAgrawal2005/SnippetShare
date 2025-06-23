@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @layer base {
   :root {
@@ -27,20 +28,6 @@
   --color--rgba-2: rgba(255, 255, 255, 0.1);  /*#ffffff1a*/
   --color--rgba-3: rgba(255, 255, 255, 0.05); /*#ffffff0d*/
   --color--rgba-4: rgba(255, 255, 255, 0.02); /*#ffffff05*/
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
@@ -161,4 +148,4 @@ p {
 
 .u-shadow-2 {
   box-shadow: rgba(0, 0, 0, 0.17) 3px 3px 10px;
-}/*# sourceMappingURL=globals.css.map */
+}
