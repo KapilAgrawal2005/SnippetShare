@@ -150,6 +150,20 @@ export const UserContextProvider = ({ children }) => {
     }
   };
 
+  //get user by it's id
+  const getUserById = async (id) => {
+    setLoading(true);
+    try {
+      const user = await axios.get(`${serverUrl}/api/v1/user/${id}`, {
+        withCredentials: true,
+      });
+      setLoading(false);
+      return user.data;
+    } catch (error) {
+      console.log("erro in fetching the user by id", error);
+      toast.error(error.response.data.message);
+    }
+  };
   // update user details
   const updateUser = async (e, data) => {
     e.preventDefault();
@@ -380,6 +394,7 @@ export const UserContextProvider = ({ children }) => {
         logoutUser,
         userLoginStatus,
         user,
+        getUserById,
         updateUser,
         emailVerification,
         verifyUser,
