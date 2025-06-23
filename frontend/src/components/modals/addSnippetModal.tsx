@@ -23,7 +23,6 @@ function AddSnippetModal() {
   useEffect(() => {
     if (modalMode === "edit-snippet" && activeSnippet) {
       // initialize activeTags and form fields with the activeSnippet data
-
       setActiveTags(activeSnippet.tags);
       setTitle(activeSnippet.title);
       setDescription(activeSnippet.description);
