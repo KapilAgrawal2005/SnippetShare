@@ -9,6 +9,7 @@ import {
   resetPassword,
   updateUser,
   userLoginStatus,
+  getUserById,
   verifyEmail,
   verifyUser,
 } from "../controllers/auth/user.controller.js";
@@ -29,6 +30,8 @@ router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 router.get("/user", protect, getUser);
 router.patch("/user", protect, updateUser);
+
+router.get("/user/:id", getUserById);
 
 // admin route
 router.delete("/admin/users/:id", protect, adminMiddleware, deleteUser);
