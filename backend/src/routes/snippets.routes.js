@@ -24,8 +24,8 @@ router.get("/snippet/public/:id", getPublicSnippetById);
 router.delete("/snippet/:id", protect, deleteSnippet);
 router.patch("/snippet/:id", protect, updateSnippet);
 router.patch("/snippet/like/:id", protect, likeSnippet);
-router.get("/snippet/liked", protect, getLikedSnippets);
-router.get("/leaderboard", protect, getLeaderBoard);
+router.get("/snippets/liked", protect, getLikedSnippets);
+router.get("/leaderboard", getLeaderBoard);
 router.get("/snippets/popular", getPopularSnippets);
 
 export default router;
