@@ -96,7 +96,6 @@ export const getPublicSnippets = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Snippets retrieved successfully.",
       snippets,
       totalSnippets,
       totalPages: Math.ceil(totalSnippets / limit),
@@ -150,7 +149,6 @@ export const getUserSnippets = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "User snippets retrieved successfully.",
       snippets,
       totalSnippets,
       totalPages: Math.ceil(totalSnippets / limit),
@@ -180,7 +178,6 @@ export const getSnippetsById = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Snippet retrieved successfully.",
       snippet,
     });
   } catch (error) {
@@ -202,7 +199,6 @@ export const getPublicSnippetById = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Public snippet retrieved successfully.",
       snippet,
     });
   } catch (error) {
@@ -382,7 +378,6 @@ export const getLikedSnippets = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Liked snippets retrieved successfully.",
       snippets,
       totalSnippets,
       totalPages: Math.ceil(totalSnippets / limit),
@@ -483,7 +478,6 @@ export const getPopularSnippets = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Popular snippets retrieved successfully.",
       popularSnippets,
       totalSnippets,
       totalPages: Math.ceil(totalSnippets / limit),
