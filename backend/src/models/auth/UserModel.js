@@ -33,6 +33,16 @@ const UserSchema = new mongoose.Schema(
       default: "I am a new user.",
     },
 
+    github: {
+      type: String,
+      default: "",
+    },
+
+    linkedin: {
+      type: String,
+      default: "",
+    },
+
     role: {
       type: String,
       enum: ["user", "admin", "creator"],

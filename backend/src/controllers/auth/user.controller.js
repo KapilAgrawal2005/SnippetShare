@@ -52,7 +52,8 @@ export const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const { _id, name, email, role, photo, bio, isVerified } = user;
+    const { _id, name, email, role, photo, bio, github, linkedin, isVerified } =
+      user;
 
     // 201 Created
     res.status(201).json({
@@ -62,6 +63,8 @@ export const registerUser = asyncHandler(async (req, res) => {
       role,
       photo,
       bio,
+      github,
+      linkedin,
       isVerified,
       token,
     });
@@ -100,7 +103,8 @@ export const loginUser = asyncHandler(async (req, res) => {
   const token = generateToken(userExists._id);
 
   if (userExists && isMatch) {
-    const { _id, name, email, role, photo, bio, isVerified } = userExists;
+    const { _id, name, email, role, photo, bio, github, linkedin, isVerified } =
+      userExists;
 
     // set the token in the cookie
     res.cookie("token", token, {
@@ -119,6 +123,8 @@ export const loginUser = asyncHandler(async (req, res) => {
       role,
       photo,
       bio,
+      github,
+      linkedin,
       isVerified,
       token,
     });
@@ -155,7 +161,7 @@ export const getUser = asyncHandler(async (req, res) => {
 //get user by id
 export const getUserById = asyncHandler(async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password, -email");
+    const user = await User.findById(req.params.id).select("-password");
     if (user) {
       res.status(200).json(user);
     } else {
@@ -174,11 +180,13 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   if (user) {
     // user properties to update
-    const { name, bio, photo } = req.body;
+    const { name, bio, photo, github, linkedin } = req.body;
     // update user properties
     user.name = req.body.name || user.name;
     user.bio = req.body.bio || user.bio;
     user.photo = req.body.photo || user.photo;
+    user.github = req.body.github || user.github;
+    user.linkedin = req.body.linkedin || user.linkedin;
 
     const updated = await user.save();
 
@@ -189,6 +197,8 @@ export const updateUser = asyncHandler(async (req, res) => {
       role: updated.role,
       photo: updated.photo,
       bio: updated.bio,
+      github: updated.github,
+      linkedin: updated.linkedin,
       isVerified: updated.isVerified,
     });
   } else {

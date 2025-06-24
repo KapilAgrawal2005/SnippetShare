@@ -29,7 +29,7 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 router.get("/user", protect, getUser);
-router.patch("/user", protect, updateUser);
+router.patch("/update-profile", protect, updateUser);
 
 router.get("/user/:id", getUserById);
 
