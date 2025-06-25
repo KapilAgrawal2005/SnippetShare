@@ -9,7 +9,7 @@ interface Props {
   };
 }
 
-function page({ params: { resetToken } }: Props) {
+const page = ({ params: { resetToken } }: Props) => {
   const { resetPassword } = useUserContext();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -111,6 +111,6 @@ function page({ params: { resetToken } }: Props) {
       </form>
     </main>
   );
-}
+};
 
 export default page;

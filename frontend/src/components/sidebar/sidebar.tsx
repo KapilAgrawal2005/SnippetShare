@@ -4,10 +4,10 @@ import { useUserContext } from "@/context/userContext";
 import {
   arrowLeft,
   bars,
-  bookmarkIcon,
   box,
   fire,
   gear,
+  heart,
   help,
   home,
   users,
@@ -47,12 +47,12 @@ const Sidebar = () => {
       id: 2,
       name: isSidebarOpen ? "Favourites" : "",
       url: `${user ? "/favourites" : "/login"}`,
-      icon: bookmarkIcon,
+      icon: heart,
     },
     {
       id: 3,
       name: isSidebarOpen ? "My Snippets" : "",
-      url: `${user ? "/snippets" : "/login"}`,
+      url: `${user ? "/mysnippets" : "/login"}`,
       icon: box,
     },
     {

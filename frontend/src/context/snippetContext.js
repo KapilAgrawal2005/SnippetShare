@@ -46,6 +46,7 @@ export const SnippetsProvider = ({ children }) => {
       await axios.patch(`${serverUrl}/snippet/${data._id}`, data);
 
       getPublicSnippets();
+      getUserSnippets();
       toast.success("Snippet updated successfully");
     } catch (error) {
       console.log("Error updating snippet", error);
@@ -153,9 +154,10 @@ export const SnippetsProvider = ({ children }) => {
       const res = await axios.get(`${serverUrl}/snippet/public/${id}`);
 
       setLoading(false);
-      return res.data;
+      return res.data.snippet;
     } catch (error) {
       console.log("Error fetching snippet by id", error);
+      setLoading(false);
     }
   };
 
@@ -182,6 +184,7 @@ export const SnippetsProvider = ({ children }) => {
       await axios.delete(`${serverUrl}/snippet/${id}`);
       toast.success("Snippet deleted successfully");
       getPublicSnippets();
+      getUserSnippets();
     } catch (error) {
       console.log("Error deleting snippet", error);
       toast.error(error.response.data.message);
@@ -276,21 +279,12 @@ export const SnippetsProvider = ({ children }) => {
   const useBtnColorMemo = useMemo(() => randomButtonColor, []);
   const useTagColorMemo = useMemo(() => randomTagColor, []);
 
-  // Log when tags state actually updates
-  useEffect(() => {
-    console.log("Tags state updated:", tags);
-  }, [tags]);
-
   useEffect(() => {
     getPublicSnippets();
     getTags();
     getLeaderboard();
     getPopularSnippets();
   }, []);
-
-  console.log("Leaderboard", leaderboard);
-
-  console.log("Popular Snippets", popularSnippets);
 
   return (
     <SnippetsContext.Provider

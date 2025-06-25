@@ -8,7 +8,7 @@ interface Props {
   };
 }
 
-function page({ params }: Props) {
+const page = ({ params }: Props) => {
   const { verificationToken } = params;
 
   const { verifyUser } = useUserContext();
@@ -28,6 +28,6 @@ function page({ params }: Props) {
       </div>
     </div>
   );
-}
+};
 
 export default page;

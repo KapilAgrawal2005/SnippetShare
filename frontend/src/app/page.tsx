@@ -4,7 +4,7 @@ import Snippet from "@/components/snippets/snippet";
 import { useSnippetContext } from "@/context/snippetContext";
 import { ISnippet } from "@/types/types";
 
-export default function Home() {
+const Home = () => {
   const { publicSnippets } = useSnippetContext();
   return (
     <div>
@@ -24,4 +24,5 @@ export default function Home() {
       )}
     </div>
   );
-}
+};
+export default Home;
