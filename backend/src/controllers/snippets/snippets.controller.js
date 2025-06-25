@@ -394,52 +394,52 @@ export const getLeaderBoard = asyncHandler(async (req, res) => {
     const leaderboard = await Snippets.aggregate([
       {
         $group: {
-          _id: "$user",
-          totalLikes: { $sum: "$likes" },
-          snippetsCount: { $sum: 1 },
+          _id: "$user", // group by user
+          totalLikes: { $sum: "$likes" }, // sum of likes
+          snippetCount: { $sum: 1 }, // count of snippets
         },
       },
       {
         $lookup: {
-          from: "users",
+          from: "users", // join with users collection
           localField: "_id",
-          foreignField: "_id",
-          as: "userDetails",
+          foreignField: "_id", // join on _id field
+          as: "userInfo", // The name of the new array field that will hold the user info
         },
       },
       {
-        $unwind: "$userDetails",
+        $unwind: "$userInfo", // flattern the userInfo array
       },
       {
         $project: {
           _id: 0,
-          userId: "$userDetails._id",
-          name: "$userDetails.name",
-          photo: "$userDetails.photo",
+          name: "$userInfo.name",
+          photo: "$userInfo.photo",
           totalLikes: 1,
-          snippetsCount: 1,
+          _id: "$userInfo._id",
+          totalLikes: 1,
+          snippetCount: 1,
           score: {
             $add: [
               { $toInt: "$totalLikes" },
-              { $multiply: ["$snippetsCount", 10] },
+              { $multiply: ["$snippetCount", 10] },
             ],
           },
         },
       },
       {
-        $sort: { totalLikes: -1 },
+        $sort: { totalLikes: -1 }, // sort by total likes
       },
+
       {
-        $limit: 50,
+        $limit: 100, // get top 100 users
       },
     ]);
 
-    return res.status(200).json({
-      leaderboard,
-    });
+    return res.status(200).json(leaderboard);
   } catch (error) {
-    console.error("Error in getLeaderBoard:", error);
-    res.status(500).json({ message: "Internal Server Error." });
+    console.log("Error in getLeaderboard", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -447,44 +447,50 @@ export const getPopularSnippets = asyncHandler(async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
     const tagId = req.query.tagId;
     const search = req.query.search;
 
+    // calculate the number of documents to skip
+    const skip = (page - 1) * limit;
+
+    // build the query object
     const query = { isPublic: true };
 
     if (tagId) {
-      query.tags = tagId;
+      // filter by tagId if tagId is provided
+      query.tags = { $in: [tagId] };
     }
 
     if (search) {
       query.$or = [
-        { title: { $regex: search, $options: "i" } },
+        { title: { $regex: search, $options: "i" } }, // i for case-insensitive
         { description: { $regex: search, $options: "i" } },
       ];
     }
 
+    // fetch popular snippets
     const popularSnippets = await Snippets.find(query)
       .populate("tags", "name")
       .populate("user", "_id name photo")
-      .sort({ likes: -1, createdAt: -1 })
+      .sort({ likes: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit * 10); // get 10 times the limit to get a good sample;
 
-    const totalSnippets = await Snippets.countDocuments({ isPublic: true });
+    // shuffle teh snippets
+    const shuffledSnippets = popularSnippets.sort(() => 0.5 - Math.random());
 
-    if (!popularSnippets || popularSnippets.length === 0) {
-      return res.status(404).json({ message: "No popular snippets found." });
-    }
+    // get snippets for the current page
+    const snippets = shuffledSnippets.slice((page - 1) * limit, page * limit);
 
+    // send paginated response
     return res.status(200).json({
-      popularSnippets,
-      totalSnippets,
-      totalPages: Math.ceil(totalSnippets / limit),
+      totalSnippets: popularSnippets.length,
+      totalPages: Math.ceil(popularSnippets.length / limit),
       currentPage: page,
+      snippets,
     });
   } catch (error) {
-    console.error("Error in getPopularSnippets:", error);
-    res.status(500).json({ message: "Internal Server Error." });
+    console.log("Error in getPopularSnippets", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
