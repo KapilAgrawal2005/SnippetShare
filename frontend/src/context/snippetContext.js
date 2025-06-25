@@ -54,6 +54,7 @@ export const SnippetsProvider = ({ children }) => {
   };
 
   const getPublicSnippets = async (userId, tagId, searchQuery, page) => {
+    setLoading(true);
     try {
       const queryParams = new URLSearchParams();
 
@@ -78,6 +79,7 @@ export const SnippetsProvider = ({ children }) => {
       );
 
       if (res.data && res.data.snippets) {
+        setLoading(false);
         setPublicSnippets(res.data.snippets);
         return res.data.snippets;
       } else {

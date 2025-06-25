@@ -315,8 +315,8 @@ const Page = () => {
         </div>
 
         <div className="py-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {snippets.map((snippet: ISnippet)=>(
-            <Snippet snippet={snippet} key={snippet._id }/>
+          {snippets.map((snippet: ISnippet) => (
+            <Snippet snippet={snippet} key={snippet._id} />
           ))}
         </div>
       </section>

@@ -13,7 +13,13 @@ import { useSnippetContext } from "@/context/snippetContext";
 import { ITag } from "@/types/types";
 
 const Categories = () => {
-  const { tags, getPublicSnippets } = useSnippetContext();
+  const {
+    tags,
+    getPublicSnippets,
+    getUserSnippets,
+    getLikedSnippets,
+    getPopularSnippets,
+  } = useSnippetContext();
 
   const userId = useUserContext().user?._id;
 
@@ -30,12 +36,26 @@ const Categories = () => {
           case "/":
             await getPublicSnippets("", activeTagId);
             break;
+          case "/mysnippets":
+            await getUserSnippets(activeTagId);
+            break;
+          case "/favourites":
+            await getLikedSnippets(activeTagId);
+            break;
+          case "/popular":
+            await getPopularSnippets(activeTagId);
+            break;
           default:
             break;
         }
       } else {
         // if no tag is selected then fetch all snippets
         await getPublicSnippets();
+        await getPopularSnippets();
+        if (userId) {
+          await getUserSnippets();
+          await getLikedSnippets();
+        }
       }
     };
     fetcData();

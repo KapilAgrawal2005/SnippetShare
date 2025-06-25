@@ -170,9 +170,13 @@ export const UserContextProvider = ({ children }) => {
     setLoading(true);
 
     try {
-      const res = await axios.patch(`${serverUrl}/api/v1/update-profile`, data, {
-        withCredentials: true, // send cookies to the server
-      });
+      const res = await axios.patch(
+        `${serverUrl}/api/v1/update-profile`,
+        data,
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
 
       // update the user state
       setUser((prevState) => {

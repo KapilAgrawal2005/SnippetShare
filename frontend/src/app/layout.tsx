@@ -35,7 +35,7 @@ export default function RootLayout({
         <Toaster position="top-center" />
         <NextTopLoader showSpinner={false} color="#7263F3" height={2} />
         <UserProvider>
-          <ModalProvider/>
+          <ModalProvider />
           <div className="h-full">
             <Header />
             <ContentProvider>{children}</ContentProvider>

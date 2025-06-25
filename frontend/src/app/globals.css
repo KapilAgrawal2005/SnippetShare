@@ -35,13 +35,13 @@ body {
   height: 100%;
 }
 
-/* h1,
+h1,
 h2,
 h3,
 h4,
 p {
   @apply text-gray-300;
-} */
+}
 
 /* .auth-page {
   height: 100vh;
@@ -125,21 +125,6 @@ p {
 }
 .tag-item:hover {
   box-shadow: 0px 4px 0px #ffffff05;
-}
-
-.active-dot {
-  position: relative;
-}
-.active-dot::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  width: 7px;
-  height: 7px;
-  background-color: #7263f3;
-  border-radius: 50%;
 }
 
 .u-shadow-1 {

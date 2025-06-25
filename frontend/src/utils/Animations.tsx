@@ -1,4 +1,5 @@
-export const animateY = {
+import { Variants } from "framer-motion";
+export const animateY: Variants = {
   hidden: { opacity: 0, y: 200 },
   visible: {
     opacity: 1,

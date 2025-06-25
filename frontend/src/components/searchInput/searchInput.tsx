@@ -1,11 +1,68 @@
 "use client";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import SearchIcon from "../../../public/Icons/SearchIcon";
+import { useSnippetContext } from "@/context/snippetContext";
+import lodash from "lodash";
+import { usePathname } from "next/navigation";
+import { useUserContext } from "@/context/userContext";
+
 interface Props {
   wFull?: boolean;
 }
 const SearchInput = ({ wFull }: Props) => {
+  const {
+    getPublicSnippets,
+    getPopularSnippets,
+    getLikedSnippets,
+    getUserSnippets,
+    getLeaderboard,
+  } = useSnippetContext();
+
   const [searchQuery, setSearchQuery] = React.useState("");
+
+  const userId = useUserContext().user?._id;
+
+  const pathname = usePathname();
+
+  const debouncedSearchQuery = useCallback(
+    lodash.debounce((query: string) => {
+      if (query) {
+        switch (pathname) {
+          case "/":
+            getPublicSnippets("", "", query);
+            break;
+          case "/popular":
+            getPopularSnippets("", query);
+            break;
+          case "/favourites":
+            getLikedSnippets("", query);
+            break;
+          case "/mysnippets":
+            getUserSnippets("", query);
+            break;
+        }
+      } else {
+        getPublicSnippets();
+        getPopularSnippets();
+        getLeaderboard();
+
+        if (userId) {
+          getLikedSnippets();
+          getUserSnippets();
+        }
+      }
+    }, 500),
+    [pathname]
+  );
+
+  useEffect(() => {
+    debouncedSearchQuery(searchQuery);
+
+    // cnacel the debounce function on unmount
+    return () => {
+      debouncedSearchQuery.cancel();
+    };
+  }, [searchQuery, debouncedSearchQuery]);
 
   return (
     <form

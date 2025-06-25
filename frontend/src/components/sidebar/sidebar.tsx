@@ -16,9 +16,10 @@ import Link from "next/link";
 
 import { useRouter } from "nextjs-toploader/app";
 import { usePathname } from "next/navigation";
+import { useGlobalContext } from "@/context/globalContext";
 const Sidebar = () => {
   const { user } = useUserContext();
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
+  const { isSidebarOpen, setIsSidebarOpen } = useGlobalContext();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -58,13 +59,13 @@ const Sidebar = () => {
     {
       id: 1,
       name: isSidebarOpen ? "Settings" : "",
-      url: `${user._id ? "/profile/update" : "/login"}`,
+      url: `${user._id ? "/profile" : "/login"}`,
       icon: gear,
     },
     {
       id: 2,
       name: isSidebarOpen ? "Help" : "",
-      url: "/help",
+      url: "/helpcenter",
       icon: help,
     },
   ];
@@ -149,32 +150,6 @@ const Sidebar = () => {
 
         {isSidebarOpen && (
           <footer className="mb-[5rem] p-4 border-t-[2px] border-rgba-3 text-gray-300">
-            <ul className="flex items-center justify-center gap-4">
-              <li>
-                <Link
-                  href="/terms"
-                  className="underline text-sm hover:text-green-400"
-                >
-                  Terms
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="underline text-sm hover:text-green-400"
-                >
-                  Privacy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/help"
-                  className="underline text-sm hover:text-green-400"
-                >
-                  Help
-                </Link>
-              </li>
-            </ul>
             <p className="text-center text-sm mt-4">
               &copy; {new Date().getFullYear()}{" "}
               <Link href={"/"}>Kapil Agrawal</Link>. All&nbsp;rights reserved.
