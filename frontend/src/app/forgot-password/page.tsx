@@ -3,7 +3,7 @@ import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm/ForgotPassw
 
 const page = () => {
   return (
-    <div className="auth-page w-full h-full flex justify-center items-center">
+    <div className="w-full min-h-screen flex justify-center items-center bg-[#181818]">
       <ForgotPasswordForm />
     </div>
   );

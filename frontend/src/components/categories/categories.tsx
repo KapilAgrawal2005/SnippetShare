@@ -30,7 +30,7 @@ const Categories = () => {
 
   useEffect(() => {
     // if a tag is seleted then filter snippets by tag
-    const fetcData = async () => {
+    const fetchData = async () => {
       if (activeTagId) {
         switch (pathname) {
           case "/":
@@ -49,16 +49,27 @@ const Categories = () => {
             break;
         }
       } else {
-        // if no tag is selected then fetch all snippets
-        await getPublicSnippets();
-        await getPopularSnippets();
-        if (userId) {
-          await getUserSnippets();
-          await getLikedSnippets();
+        // if no tag is selected then fetch all snippets based on current page
+        switch (pathname) {
+          case "/":
+            await getPublicSnippets();
+            break;
+          case "/mysnippets":
+            await getUserSnippets();
+            break;
+          case "/favourites":
+            await getLikedSnippets();
+            break;
+          case "/popular":
+            await getPopularSnippets();
+            break;
+          default:
+            await getPublicSnippets();
+            break;
         }
       }
     };
-    fetcData();
+    fetchData();
   }, [pathname, userId, activeTagId]);
 
   return (
@@ -75,7 +86,6 @@ const Categories = () => {
               onClick={() => {
                 setActiveTag("All");
                 setActiveTagId(null);
-                getPublicSnippets();
               }}
             >
               All

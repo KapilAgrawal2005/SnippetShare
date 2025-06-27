@@ -8,8 +8,8 @@ import { next, prev } from "@/utils/Icons";
 import { useEffect, useState } from "react";
 
 const Home = () => {
-  const { publicSnippets, loading } = useSnippetContext();
-  const { getPublicSnippets, getTags } = useSnippetContext();
+  const { getPublicSnippets, getTags, publicSnippets, loading } =
+    useSnippetContext();
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -40,7 +40,7 @@ const Home = () => {
       <div
         className={`min-h-[100vh] px-8 pt-[6.3rem] pb-8 grid grid-cols-1 lg:grid-cols-2 gap-6 relative`}
       >
-        {loading && publicSnippets.length > 0 ? (
+        {loading ? (
           <LoadingSpinner />
         ) : (
           publicSnippets.map((snippet: ISnippet) => {

@@ -79,20 +79,29 @@ export const SnippetsProvider = ({ children }) => {
       );
 
       if (res.data && res.data.snippets) {
-        setLoading(false);
         setPublicSnippets(res.data.snippets);
+        setLoading(false);
         return res.data.snippets;
       } else {
-        console.log("No public snippets found");
-        return res.data.snippets;
+        setPublicSnippets([]);
+        setLoading(false);
+        return [];
       }
     } catch (error) {
       console.log("Error fetching public snippets", error);
+      setPublicSnippets([]);
+      setLoading(false);
       return [];
     }
   };
 
   const getUserSnippets = async (tagId, search) => {
+    // Only fetch user snippets if user is logged in
+    if (!userId) {
+      setUserSnippets([]);
+      return [];
+    }
+
     setLoading(true);
     try {
       const queryParams = new URLSearchParams();
@@ -113,16 +122,30 @@ export const SnippetsProvider = ({ children }) => {
       );
 
       setLoading(false);
-
       setUserSnippets(res.data);
 
       return res.data;
     } catch (error) {
+      // Handle authentication errors silently
+      if (error.response?.status === 401 || error.response?.status === 404) {
+        setUserSnippets([]);
+        setLoading(false);
+        return [];
+      }
       console.log("Error fetching user snippets", error);
+      setUserSnippets([]);
+      setLoading(false);
+      return [];
     }
   };
 
   const getLikedSnippets = async (tagId, search) => {
+    // Only fetch liked snippets if user is logged in
+    if (!userId) {
+      setLikedSnippets([]);
+      return [];
+    }
+
     setLoading(true);
     try {
       const queryParams = new URLSearchParams();
@@ -146,7 +169,16 @@ export const SnippetsProvider = ({ children }) => {
       setLikedSnippets(res.data);
       return res.data;
     } catch (error) {
+      // Handle authentication errors silently
+      if (error.response?.status === 401 || error.response?.status === 404) {
+        setLikedSnippets([]);
+        setLoading(false);
+        return [];
+      }
       console.log("Error fetching liked snippets", error);
+      setLikedSnippets([]);
+      setLoading(false);
+      return [];
     }
   };
 
@@ -159,7 +191,6 @@ export const SnippetsProvider = ({ children }) => {
       return res.data.snippet;
     } catch (error) {
       console.log("Error fetching snippet by id", error);
-      setLoading(false);
     }
   };
 
@@ -286,7 +317,12 @@ export const SnippetsProvider = ({ children }) => {
     getTags();
     getLeaderboard();
     getPopularSnippets();
-  }, []);
+    // Only fetch user-specific data if user is logged in
+    if (userId) {
+      getUserSnippets();
+      getLikedSnippets();
+    }
+  }, [userId]);
 
   return (
     <SnippetsContext.Provider
