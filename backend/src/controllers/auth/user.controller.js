@@ -7,7 +7,8 @@ import Token from "../../models/auth/Token.js";
 import crypto from "node:crypto";
 import hashToken from "../../helpers/hashToken.js";
 import sendEmail from "../../helpers/sendEmail.js";
-import { generateResetPasswordEmailTemplate } from "../../../utils/emailTemplates.js";
+import { generateResetPasswordEmailTemplate } from "../../utils/emailTemplates.js";
+import { sendOTP } from "../../helpers/sendOTP.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -33,12 +34,18 @@ export const registerUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "User already exists" });
   }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   // create new user
   const user = await User.create({
     name,
     email,
-    password,
+    password: hashedPassword,
   });
+
+  const otp = await user.generateOTP();
+  await user.save();
+  sendOTP(otp, email, res);
 
   // generate token with user id
   const token = generateToken(user._id);
@@ -47,7 +54,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   res.cookie("token", token, {
     path: "/",
     httpOnly: true,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
     sameSite: "none", // cross-site access --> allow all third-party cookies
     secure: true,
   });
@@ -368,9 +375,8 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const reply_to = "noreply@noreply.com";
   const name = user.name;
 
-
   try {
-    await sendEmail(subject, send_to, send_from, reply_to, name,message);
+    await sendEmail(subject, send_to, send_from, reply_to, name, message);
     res.json({ message: "Email sent" });
   } catch (error) {
     console.log("Error sending email: ", error);

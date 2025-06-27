@@ -57,24 +57,12 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true, minimize: true }
 );
 
-// hash the password before saving
-UserSchema.pre("save", async function (next) {
-  // check if the password is not modified
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  // hash the password  ==> bcrypt
-  // generate salt
-  const salt = await bcrypt.genSalt(10);
-  // hash the password with the salt
-  const hashedPassword = await bcrypt.hash(this.password, salt);
-  // set the password to the hashed password
-  this.password = hashedPassword;
-
-  // call the next middleware
-  next();
-});
+UserSchema.methods.generateOTP = function () {
+  const otp = Math.floor(Math.random() * 900000) + 100000;
+  this.otp = otp;
+  this.otpExpire = Date.now() + 15 * 60 * 1000; // 10 minutes
+  return otp;
+};
 
 const User = mongoose.model("User", UserSchema);
 

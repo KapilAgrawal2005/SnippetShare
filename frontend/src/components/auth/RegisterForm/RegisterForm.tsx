@@ -2,7 +2,7 @@
 import { useUserContext } from "@/context/userContext";
 import React from "react";
 
-function RegisterForm() {
+const RegisterForm = () => {
   const { registerUser, userState, handlerUserInput } = useUserContext();
   const { name, email, password } = userState;
   const [showPassword, setShowPassword] = React.useState(false);
@@ -11,6 +11,7 @@ function RegisterForm() {
 
   return (
     <form
+      onSubmit={registerUser}
       className="relative w-full max-w-[420px] px-6 py-10 rounded-2xl bg-[#232526]/80 backdrop-blur-md border border-white/10 shadow-xl"
       style={{ boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.25)" }}
     >
@@ -87,7 +88,6 @@ function RegisterForm() {
           <button
             type="submit"
             disabled={!name || !email || !password}
-            onClick={registerUser}
             className="mt-6 flex-1 px-4 py-3 font-bold bg-[#6EE7B7] text-[#181818] rounded-lg hover:bg-[#2ECC71] transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
           >
             Register Now
@@ -96,6 +96,6 @@ function RegisterForm() {
       </div>
     </form>
   );
-}
+};
 
 export default RegisterForm;

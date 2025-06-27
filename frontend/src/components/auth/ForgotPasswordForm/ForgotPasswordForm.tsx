@@ -1,5 +1,6 @@
 "use client";
 import { useUserContext } from "@/context/userContext";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const ForgotPasswordForm = () => {
@@ -49,6 +50,14 @@ const ForgotPasswordForm = () => {
           >
             Reset Password
           </button>
+        </div>
+        <div className="mt-6 w-full flex justify-center">
+          <Link
+            href="/login"
+            className="text-[#6EE7B7] hover:underline text-sm font-medium transition-colors"
+          >
+            &larr; Back to Login
+          </Link>
         </div>
       </div>
     </form>

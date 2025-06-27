@@ -18,18 +18,24 @@ function ContentProvider({ children }: Props) {
     "/login",
     "/register",
     "/forgot-password",
-    "/terms",
+    "/reset-password",
   ];
 
-  const marginClass = hideSidebarPaths.includes(pathname)
-    ? "ml-0"
-    : isSidebarOpen
-    ? "ml-[15rem]"
-    : "ml-[5.2rem]";
+  // Check for dynamic reset-password route
+  const isResetPasswordPage = pathname.startsWith("/reset-password");
+
+  const marginClass =
+    hideSidebarPaths.includes(pathname) || isResetPasswordPage
+      ? "ml-0"
+      : isSidebarOpen
+      ? "ml-[15rem]"
+      : "ml-[5.2rem]";
 
   return (
     <div className="relative">
-      {!hideSidebarPaths.includes(pathname) && <Sidebar />}
+      {!(hideSidebarPaths.includes(pathname) || isResetPasswordPage) && (
+        <Sidebar />
+      )}
       <div className={`mt-[8vh] ${marginClass}`}>{children}</div>
     </div>
   );
