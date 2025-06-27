@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState, useContext } from "react";
 import toast from "react-hot-toast";
 
@@ -12,6 +12,8 @@ export const UserContextProvider = ({ children }) => {
   const serverUrl = "http://localhost:4000";
 
   const router = useRouter();
+
+  const pathname = usePathname();
 
   const [user, setUser] = useState({});
   const [allUsers, setAllUsers] = useState([]);
@@ -119,8 +121,9 @@ export const UserContextProvider = ({ children }) => {
 
       toast.success("User logged out successfully");
 
-      // redirect to login page
-      router.push("/login");
+      if(pathname === "/favourites" || pathname === "/mysnippets" || pathname === "/profile"){
+         router.push("/login");
+      }
     } catch (error) {
       console.log("Error logging out user", error);
       toast.error(error.response.data.message);

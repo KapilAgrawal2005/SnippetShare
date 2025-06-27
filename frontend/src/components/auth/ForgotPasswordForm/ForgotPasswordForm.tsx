@@ -2,15 +2,11 @@
 import { useUserContext } from "@/context/userContext";
 import React, { useState } from "react";
 
-function ForgotPasswordForm() {
+const ForgotPasswordForm = () => {
   const { forgotPasswordEmail } = useUserContext();
 
   // state
   const [email, setEmail] = useState("");
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -22,6 +18,7 @@ function ForgotPasswordForm() {
 
   return (
     <form
+      onSubmit={handleSubmit}
       className="relative w-full max-w-[420px] px-6 py-10 rounded-2xl bg-[#232526]/80 backdrop-blur-md border border-white/10 shadow-xl"
       style={{ boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.25)" }}
     >
@@ -36,7 +33,9 @@ function ForgotPasswordForm() {
           <input
             type="email"
             value={email}
-            onChange={handleEmailChange}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             name="email"
             placeholder="johndoe@gmail.com"
             className="px-4 py-3 bg-[#181818] border border-white/10 rounded-lg outline-none text-white placeholder-gray-500 focus:ring-2 focus:ring-[#6EE7B7] transition-all"
@@ -46,7 +45,6 @@ function ForgotPasswordForm() {
         <div className="flex">
           <button
             type="submit"
-            onClick={handleSubmit}
             className="mt-6 flex-1 px-4 py-3 font-bold bg-[#6EE7B7] text-[#181818] rounded-lg hover:bg-[#2ECC71] transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
           >
             Reset Password
@@ -55,6 +53,6 @@ function ForgotPasswordForm() {
       </div>
     </form>
   );
-}
+};
 
 export default ForgotPasswordForm;

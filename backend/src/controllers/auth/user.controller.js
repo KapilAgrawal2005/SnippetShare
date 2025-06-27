@@ -7,6 +7,7 @@ import Token from "../../models/auth/Token.js";
 import crypto from "node:crypto";
 import hashToken from "../../helpers/hashToken.js";
 import sendEmail from "../../helpers/sendEmail.js";
+import { generateResetPasswordEmailTemplate } from "../../../utils/emailTemplates.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -352,23 +353,24 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     userId: user._id,
     passwordResetToken: hashedToken,
     createdAt: Date.now(),
-    expiresAt: Date.now() + 60 * 60 * 1000, // 1 hour
+    expiresAt: Date.now() + 60 * 15 * 1000, // 15 min
   }).save();
 
   // reset link
   const resetLink = `${process.env.CLIENT_URL}/reset-password/${passwordResetToken}`;
 
+  const message = generateResetPasswordEmailTemplate(resetLink);
+
   // send email to user
-  const subject = "Password Reset - AuthKit";
+  const subject = "Password Reset - For Snippy";
   const send_to = user.email;
-  const send_from = process.env.USER_EMAIL;
+  const send_from = "Snippy - A Snippet Share Platform";
   const reply_to = "noreply@noreply.com";
-  const template = "forgotPassword";
   const name = user.name;
-  const url = resetLink;
+
 
   try {
-    await sendEmail(subject, send_to, send_from, reply_to, template, name, url);
+    await sendEmail(subject, send_to, send_from, reply_to, name,message);
     res.json({ message: "Email sent" });
   } catch (error) {
     console.log("Error sending email: ", error);

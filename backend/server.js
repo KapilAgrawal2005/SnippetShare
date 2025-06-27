@@ -34,7 +34,6 @@ routeFiles.forEach((file) => {
   import(`./src/routes/${file}`)
     .then((route) => {
       app.use("/api/v1", route.default);
-      console.log(`Route loaded: ${file}`);
     })
     .catch((err) => {
       console.log("Failed to load route file", file, err);
