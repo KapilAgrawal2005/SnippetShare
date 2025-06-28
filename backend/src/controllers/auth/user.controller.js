@@ -8,7 +8,6 @@ import crypto from "node:crypto";
 import hashToken from "../../helpers/hashToken.js";
 import sendEmail from "../../helpers/sendEmail.js";
 import { generateResetPasswordEmailTemplate } from "../../utils/emailTemplates.js";
-import { sendOTP } from "../../helpers/sendOTP.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -43,10 +42,6 @@ export const registerUser = asyncHandler(async (req, res) => {
     password: hashedPassword,
   });
 
-  const otp = await user.generateOTP();
-  await user.save();
-  sendOTP(otp, email, res);
-
   // generate token with user id
   const token = generateToken(user._id);
 
@@ -59,26 +54,12 @@ export const registerUser = asyncHandler(async (req, res) => {
     secure: true,
   });
 
-  if (user) {
-    const { _id, name, email, role, photo, bio, github, linkedin, isVerified } =
-      user;
-
-    // 201 Created
-    res.status(201).json({
-      _id,
-      name,
-      email,
-      role,
-      photo,
-      bio,
-      github,
-      linkedin,
-      isVerified,
-      token,
-    });
-  } else {
-    res.status(400).json({ message: "Invalid user data" });
-  }
+  // 201 Created
+  res.status(201).json({
+    message: "User registered successfully.",
+    user,
+    token,
+  });
 });
 
 // user login
@@ -125,6 +106,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     // send back the user and token in the response to the client
     res.status(200).json({
+      message: "User logged in successfully.",
       _id,
       name,
       email,
@@ -150,7 +132,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
     path: "/",
   });
 
-  res.status(200).json({ message: "User logged out" });
+  res.status(200).json({ message: "User logged out successfully." });
 });
 
 // get user
@@ -187,8 +169,6 @@ export const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    // user properties to update
-    const { name, bio, photo, github, linkedin } = req.body;
     // update user properties
     user.name = req.body.name || user.name;
     user.bio = req.body.bio || user.bio;
@@ -199,6 +179,7 @@ export const updateUser = asyncHandler(async (req, res) => {
     const updated = await user.save();
 
     res.status(200).json({
+      message: "Profile updated successfully.",
       _id: updated._id,
       name: updated.name,
       email: updated.email,
@@ -373,11 +354,10 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const send_to = user.email;
   const send_from = "Snippy - A Snippet Share Platform";
   const reply_to = "noreply@noreply.com";
-  const name = user.name;
 
   try {
-    await sendEmail(subject, send_to, send_from, reply_to, name, message);
-    res.json({ message: "Email sent" });
+    await sendEmail(subject, send_to, send_from, reply_to, message);
+    res.json({ message: "Password reset mail has been sent." });
   } catch (error) {
     console.log("Error sending email: ", error);
     return res.status(500).json({ message: "Email could not be sent" });
@@ -414,7 +394,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
   user.password = password;
   await user.save();
 
-  res.status(200).json({ message: "Password reset successfully" });
+  res.status(200).json({ message: "Password reset successfully!" });
 });
 
 // change password
