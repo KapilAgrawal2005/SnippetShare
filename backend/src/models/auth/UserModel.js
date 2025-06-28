@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -56,13 +55,6 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true, minimize: true }
 );
-
-UserSchema.methods.generateOTP = function () {
-  const otp = Math.floor(Math.random() * 900000) + 100000;
-  this.otp = otp;
-  this.otpExpire = Date.now() + 15 * 60 * 1000; // 10 minutes
-  return otp;
-};
 
 const User = mongoose.model("User", UserSchema);
 
