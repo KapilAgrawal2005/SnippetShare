@@ -38,8 +38,7 @@ export const UserContextProvider = ({ children }) => {
 
     try {
       const res = await axios.post(`${serverUrl}/api/v1/register`, userState);
-      console.log("User registered successfully", res.data);
-      toast.success("User registered successfully");
+      toast.success(res.data.message);
 
       // clear the form
       setUserState({
@@ -48,8 +47,10 @@ export const UserContextProvider = ({ children }) => {
         password: "",
       });
 
-      // redirect to login page
-      router.push("/login");
+      // const verificationToken = res.data.verificationToken;
+      // if (verificationToken) {
+      //   router.push(`/verify-email/${verificationToken}`);
+      // }
     } catch (error) {
       console.log("Error registering user", error);
       toast.error(error.response.data.message);
@@ -71,7 +72,7 @@ export const UserContextProvider = ({ children }) => {
         }
       );
 
-      toast.success("User logged in successfully");
+      toast.success(res.data.message);
 
       // clear the form
       setUserState({
@@ -119,10 +120,14 @@ export const UserContextProvider = ({ children }) => {
         withCredentials: true, // send cookies to the server
       });
 
-      toast.success("User logged out successfully");
+      toast.success(res.data.message);
 
-      if(pathname === "/favourites" || pathname === "/mysnippets" || pathname === "/profile"){
-         router.push("/login");
+      if (
+        pathname === "/favourites" ||
+        pathname === "/mysnippets" ||
+        pathname === "/profile"
+      ) {
+        router.push("/login");
       }
     } catch (error) {
       console.log("Error logging out user", error);
@@ -189,7 +194,7 @@ export const UserContextProvider = ({ children }) => {
         };
       });
 
-      toast.success("User updated successfully");
+      toast.success(res.data.message);
 
       setLoading(false);
     } catch (error) {
@@ -262,7 +267,7 @@ export const UserContextProvider = ({ children }) => {
         }
       );
 
-      toast.success("Forgot password email sent successfully");
+      toast.success(res.data.message);
       setLoading(false);
     } catch (error) {
       console.log("Error sending forgot password email", error);
@@ -286,7 +291,7 @@ export const UserContextProvider = ({ children }) => {
         }
       );
 
-      toast.success("Password reset successfully");
+      toast.success(res.data.message);
       setLoading(false);
       // redirect to login page
       router.push("/login");
