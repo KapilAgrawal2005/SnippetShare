@@ -6,8 +6,15 @@ import React from "react";
 import useUserRedirect from "@/hooks/useUserRedirect";
 function page() {
   useUserRedirect("/login");
-  const { user, updateUser, changePassword, userState, handlerUserInput } =
-    useUserContext();
+  const {
+    user,
+    updateUser,
+    changePassword,
+    userState,
+    handlerUserInput,
+    emailVerification,
+    loading,
+  } = useUserContext();
 
   const [oldPassword, setOldPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
@@ -49,6 +56,30 @@ function page() {
             </label>
             <input id="file-upload" type="file" className="hidden" />
           </div>
+
+          {/* Email Verification Section */}
+          {user && !user.isVerified && (
+            <div className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-yellow-400 font-medium">
+                    Email Not Verified
+                  </h3>
+                  <p className="text-gray-300 text-sm mt-1">
+                    Please verify your email address to access all features.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={emailVerification}
+                  disabled={loading}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                >
+                  {loading ? "Sending..." : "Verify Email"}
+                </button>
+              </div>
+            </div>
+          )}
 
           <label htmlFor="github" className="mt-4 text-gray-300">
             Add Social Links

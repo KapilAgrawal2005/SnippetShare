@@ -7,7 +7,10 @@ import Token from "../../models/auth/Token.js";
 import crypto from "node:crypto";
 import hashToken from "../../helpers/hashToken.js";
 import sendEmail from "../../helpers/sendEmail.js";
-import { generateResetPasswordEmailTemplate } from "../../utils/emailTemplates.js";
+import {
+  generateResetPasswordEmailTemplate,
+  generateVerificationEmailTemplate,
+} from "../../utils/emailTemplates.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -251,19 +254,18 @@ export const verifyEmail = asyncHandler(async (req, res) => {
   // verification link
   const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
 
+  const message = generateVerificationEmailTemplate(verificationLink);
+
   // send email
-  const subject = "Email Verification - AuthKit";
+  const subject = "Email Verification - for Snippy";
   const send_to = user.email;
-  const reply_to = "noreply@gmail.com";
-  const template = "emailVerification";
-  const send_from = process.env.USER_EMAIL;
-  const name = user.name;
-  const url = verificationLink;
+  const reply_to = "noreply@noreply.com";
+  const send_from = "Snippy - A Snippet Share Platform";
 
   try {
     // order matters ---> subject, send_to, send_from, reply_to, template, name, url
-    await sendEmail(subject, send_to, send_from, reply_to, template, name, url);
-    return res.json({ message: "Email sent" });
+    await sendEmail(subject, send_to, send_from, reply_to, message);
+    return res.json({ message: "Verification mail has been sent." });
   } catch (error) {
     console.log("Error sending email: ", error);
     return res.status(500).json({ message: "Email could not be sent" });
@@ -304,7 +306,7 @@ export const verifyUser = asyncHandler(async (req, res) => {
   // update user to verified
   user.isVerified = true;
   await user.save();
-  res.status(200).json({ message: "User verified" });
+  res.status(200).json({ message: "User hes been verified." });
 });
 
 // forgot password

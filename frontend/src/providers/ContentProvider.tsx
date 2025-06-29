@@ -19,13 +19,17 @@ function ContentProvider({ children }: Props) {
     "/register",
     "/forgot-password",
     "/reset-password",
+    "/verify-email",
   ];
 
   // Check for dynamic reset-password route
   const isResetPasswordPage = pathname.startsWith("/reset-password");
+  const isUserVerifyPage = pathname.startsWith("/verify-email");
 
   const marginClass =
-    hideSidebarPaths.includes(pathname) || isResetPasswordPage
+    hideSidebarPaths.includes(pathname) ||
+    isResetPasswordPage ||
+    isUserVerifyPage
       ? "ml-0"
       : isSidebarOpen
       ? "ml-[15rem]"
@@ -33,9 +37,11 @@ function ContentProvider({ children }: Props) {
 
   return (
     <div className="relative">
-      {!(hideSidebarPaths.includes(pathname) || isResetPasswordPage) && (
-        <Sidebar />
-      )}
+      {!(
+        hideSidebarPaths.includes(pathname) ||
+        isResetPasswordPage ||
+        isUserVerifyPage
+      ) && <Sidebar />}
       <div className={`mt-[8vh] ${marginClass}`}>{children}</div>
     </div>
   );

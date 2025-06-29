@@ -216,7 +216,7 @@ export const UserContextProvider = ({ children }) => {
         }
       );
 
-      toast.success("Email verification sent successfully");
+      toast.success(res.data.message);
       setLoading(false);
     } catch (error) {
       console.log("Error sending email verification", error);
@@ -237,7 +237,7 @@ export const UserContextProvider = ({ children }) => {
         }
       );
 
-      toast.success("User verified successfully");
+      toast.success(res.data.message);
 
       // refresh the user details
       getUser();
