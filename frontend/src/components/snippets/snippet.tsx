@@ -155,12 +155,6 @@ function Snippet({ snippet, height = "400px" }: Props) {
           >
             {copy}
           </button>
-          <button
-            className="w-10 h-10 rounded-md text-green-400 text-lg flex items-center justify-center"
-            style={{ background: useBtnColorMemo }}
-          >
-            {bookmarkEmpty}
-          </button>
         </div>
       </div>
 
