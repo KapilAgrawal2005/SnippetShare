@@ -215,9 +215,8 @@ export const UserContextProvider = ({ children }) => {
           withCredentials: true, // send cookies to the server
         }
       );
-
-      toast.success(res.data.message);
       setLoading(false);
+      toast.success(res.data.message);
     } catch (error) {
       console.log("Error sending email verification", error);
       setLoading(false);

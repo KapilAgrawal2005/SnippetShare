@@ -58,7 +58,7 @@ const Sidebar = () => {
     },
     {
       id: 1,
-      name: isSidebarOpen ? "Settings" : "",
+      name: isSidebarOpen ? "Profile" : "",
       url: `${user._id ? "/profile" : "/login"}`,
       icon: gear,
     },

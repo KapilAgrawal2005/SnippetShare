@@ -13,6 +13,11 @@ export const GlobalProvider = ({ children }) => {
     setIsEditing(true);
   };
 
+  const openEmailVerificationModal = () => {
+    setModalMode("email-verification");
+    setIsEditing(false);
+  };
+
   const openProfileModal = () => {
     setModalMode("profile");
   };
@@ -46,6 +51,7 @@ export const GlobalProvider = ({ children }) => {
         openModalForSearch,
         closeModal,
         setIsSidebarOpen,
+        openEmailVerificationModal,
       }}
     >
       {children}

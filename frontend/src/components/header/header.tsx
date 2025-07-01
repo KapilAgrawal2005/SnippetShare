@@ -9,14 +9,17 @@ import { login, register } from "@/utils/Icons";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/context/globalContext";
 import SearchIcon from "../../../public/Icons/SearchIcon";
+
 const Header = () => {
   const { user } = useUserContext();
-
-  const { openModalForSnippet, openProfileModal, openModalForSearch } =
-    useGlobalContext();
+  const {
+    openModalForSnippet,
+    openProfileModal,
+    openModalForSearch,
+    openEmailVerificationModal,
+  } = useGlobalContext();
 
   const photo = user?.photo;
-
   const router = useRouter();
   return (
     <div className="fixed z-20 top-0 w-full px-8 flex items-center justify-between bg-[#252525] border-b-[2px] border-[#ffffff1a] h-[10vh]">
@@ -60,7 +63,13 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <button
             className="mr-4 h-[42px] px-4 flex items-center justify-center bg-white rounded-lg font-semibold hover:bg-white/80 transition duration-200 ease-in-out"
-            onClick={openModalForSnippet}
+            onClick={() => {
+              if (user?.isVerified) {
+                openModalForSnippet();
+              } else {
+                openEmailVerificationModal();
+              }
+            }}
           >
             Create Snippet
           </button>
