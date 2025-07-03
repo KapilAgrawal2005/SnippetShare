@@ -22,6 +22,7 @@ import {
   deleteUser,
   getAllUsers,
 } from "../controllers/auth/admin.controller.js";
+import { getUserActivity } from "../controllers/auth/userActivity.controller.js";
 
 const router = express.Router();
 
@@ -56,5 +57,8 @@ router.post("/reset-password/:resetPasswordToken", resetPassword);
 
 // change password ---> user must be logged in
 router.patch("/change-password", protect, changePassword);
+
+// get user activity
+router.get("/user/:id/activity", getUserActivity);
 
 export default router;

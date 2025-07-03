@@ -8,9 +8,10 @@ import Link from "next/link";
 import { envelope, github, linkedin, edit, users } from "@/utils/Icons";
 import { useSnippetContext } from "@/context/snippetContext";
 import Snippet from "@/components/snippets/snippet";
+import ActivityBar from "@/components/activity/activityBar";
 
 const Page = () => {
-  const { getUserById, user } = useUserContext();
+  const { getUserById, user, getUserActivity } = useUserContext();
   const { getPublicSnippets } = useSnippetContext();
 
   const params = useParams();
@@ -19,11 +20,23 @@ const Page = () => {
   const [snippets, setSnippets] = useState([]);
   const [creatorDetails, setCreatorDetails] = useState({} as IUser);
   const [isLoading, setIsLoading] = useState(true);
+  const [activity, setActivity] = useState([]); // Add this state
 
   const creatorId = id?.split("-")?.at(-1) || id;
 
   // Check if the current user is viewing their own profile
   const isOwnProfile = user?._id === creatorId;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getUserActivity(creatorId);
+        setActivity(data);
+      } catch (error) {
+        console.log("Error fetching activity data", error);
+      }
+    })();
+  }, [creatorId]);
 
   useEffect(() => {
     (async () => {
@@ -37,7 +50,7 @@ const Page = () => {
         setIsLoading(false);
       }
     })();
-  }, [creatorId, getUserById]);
+  }, [creatorId]);
 
   useEffect(() => {
     if (creatorId) {
@@ -64,9 +77,7 @@ const Page = () => {
           {/* Edit Button */}
           {isOwnProfile && (
             <Link href={"/profile"}>
-              <button
-                className="absolute top-4 right-4 p-3 bg-[#333] hover:bg-blue-500 rounded-full text-white transition-all duration-300 hover:scale-110"
-              >
+              <button className="absolute top-4 right-4 p-3 bg-[#333] hover:bg-blue-500 rounded-full text-white transition-all duration-300 hover:scale-110">
                 {edit}
               </button>
             </Link>
@@ -158,6 +169,63 @@ const Page = () => {
                   </p>
                 </div>
               </div>
+
+              {/* Contributions Section */}
+              <section className="max-w-3xl mx-auto mt-10">
+                <div className="rounded-2xl border border-[#333] p-8 md:p-12 bg-gradient-to-br from-[#181818] via-[#23272f] to-[#181818] shadow-xl relative overflow-hidden">
+                  {/* Decorative background dots */}
+                  <div className="absolute inset-0 pointer-events-none opacity-20">
+                    <svg width="100%" height="100%">
+                      <defs>
+                        <pattern
+                          id="dots"
+                          x="0"
+                          y="0"
+                          width="20"
+                          height="20"
+                          patternUnits="userSpaceOnUse"
+                        >
+                          <circle cx="1" cy="1" r="1" fill="#6FCF97" />
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#dots)" />
+                    </svg>
+                  </div>
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-3xl bg-[#6FCF97] bg-opacity-20 rounded-lg p-2">
+                        {/* icon */}
+                      </span>
+                      <h2 className="text-3xl font-extrabold text-white tracking-tight">
+                        Contributions
+                      </h2>
+                    </div>
+                    <p className="text-gray-400 mb-8 text-lg">
+                      Your activity in the last 90 days
+                    </p>
+                    <div className="flex flex-col md:flex-row md:items-end gap-6">
+                      <div className="w-full md:w-auto flex-1">
+                        <ActivityBar data={activity} />
+                      </div>
+                      {/* Legend */}
+                      <div className="flex flex-col gap-2 items-end">
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded bg-[#23272f] border border-[#333]"></span>
+                          <span className="text-gray-400 text-sm">
+                            No activity
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded bg-[#6FCF97]"></span>
+                          <span className="text-gray-400 text-sm">
+                            Active day
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
             </div>
           </div>
         </div>

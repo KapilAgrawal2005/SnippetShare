@@ -168,10 +168,28 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
       return user.data;
     } catch (error) {
-      console.log("erro in fetching the user by id", error);
+      console.log("error in fetching the user by id", error);
       toast.error(error.response.data.message);
     }
   };
+
+  // get user activity
+  const getUserActivity = async (id) => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${serverUrl}/api/v1/user/${id}/activity`, {
+        withCredentials: true,
+      });
+      setLoading(false);
+      return res.data;
+    } catch (error) {
+      console.log("Error fetching user activity", error);
+      setLoading(false);
+      toast.error(error.response?.data?.message || "Failed to fetch activity");
+      return [];
+    }
+  };
+
   // update user details
   const updateUser = async (e, data) => {
     e.preventDefault();
@@ -414,6 +432,7 @@ export const UserContextProvider = ({ children }) => {
         changePassword,
         allUsers,
         deleteUser,
+        getUserActivity,
       }}
     >
       {children}
