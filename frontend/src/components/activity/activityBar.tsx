@@ -85,15 +85,16 @@ export default function ActivityBar({ data, days = 90 }: Props) {
   const monthSpans = getMonthSpans(weeks);
 
   return (
-    <div>
+    <div className="w-full overflow-x-auto">
       {/* Month labels */}
-      <div className="flex ml-12 mb-1">
+      <div className="flex min-w-[340px] ml-10 mb-1">
         {monthSpans.map((m, i) => (
           <span
             key={i}
             className="text-xs text-gray-400 text-center"
             style={{
-              width: `${m.span * 28}px`,
+              width: `${m.span * 22}px`,
+              minWidth: `${m.span * 22}px`,
               display: "inline-block",
             }}
           >
@@ -101,9 +102,9 @@ export default function ActivityBar({ data, days = 90 }: Props) {
           </span>
         ))}
       </div>
-      <div className="flex">
+      <div className="flex min-w-[340px]">
         {/* Weekday labels */}
-        <div className="flex flex-col items-center gap-[2px] mr-4">
+        <div className="flex flex-col items-center gap-[2px] mr-2">
           {weekDays.map((wd, i) => (
             <span
               key={i}
@@ -112,6 +113,7 @@ export default function ActivityBar({ data, days = 90 }: Props) {
                 height: 20,
                 lineHeight: "20px",
                 width: 28,
+                minWidth: 28,
                 textAlign: "right",
               }}
             >
@@ -125,7 +127,7 @@ export default function ActivityBar({ data, days = 90 }: Props) {
             display: "grid",
             gridTemplateColumns: `repeat(${weeks.length}, 20px)`,
             gridTemplateRows: `repeat(7, 20px)`,
-            gap: "2px 6px",
+            gap: "2px",
           }}
         >
           {weeks.map((week, wi) =>
@@ -133,7 +135,7 @@ export default function ActivityBar({ data, days = 90 }: Props) {
               <div
                 key={`${wi}-${di}`}
                 title={
-                  day.date
+                  day.date && new Date(day.date) <= today
                     ? `${day.date}: ${day.count} snippet${
                         day.count !== 1 ? "s" : ""
                       }`
@@ -143,11 +145,17 @@ export default function ActivityBar({ data, days = 90 }: Props) {
                   width: 18,
                   height: 18,
                   border: "1px solid #ffffff1a",
-                  background: getColor(day.count),
+                  background:
+                    day.date && new Date(day.date) > today
+                      ? "transparent"
+                      : getColor(day.count),
                   borderRadius: 3,
                   transition: "background 0.2s",
                   gridColumn: wi + 1,
                   gridRow: di + 1,
+                  opacity: day.date && new Date(day.date) > today ? 0 : 1,
+                  pointerEvents:
+                    day.date && new Date(day.date) > today ? "none" : "auto",
                 }}
               />
             ))
