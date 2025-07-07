@@ -310,10 +310,11 @@ export const likeSnippet = asyncHandler(async (req, res) => {
 
     if (snippet.likedBy.includes(userId)) {
       // User already liked the snippet, so we remove the like
-      snippet.likes -= 1;
+      snippet.likes = Math.max(0, snippet.likes - 1);
       snippet.likedBy = snippet.likedBy.filter(
         (like) => like.toString() !== userId
       );
+      console.log(snippet.likes);
       await snippet.save();
 
       return res.status(200).json({
@@ -328,7 +329,7 @@ export const likeSnippet = asyncHandler(async (req, res) => {
 
       return res.status(200).json({
         likes: snippet.likes,
-        message: "Snippet liked successfully.",
+        message: "Snippet has been liked.",
       });
     }
   } catch (error) {
@@ -343,13 +344,14 @@ export const getLikedSnippets = asyncHandler(async (req, res) => {
     const tagId = req.query.tagId;
     const search = req.query.search;
 
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized! Please login" });
+    }
+
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
 
-    if (!userId) {
-      return res.status(400).json({ message: "Not Authorized! Please Login." });
-    }
+    const skip = (page - 1) * limit;
 
     const query = { likedBy: userId };
 
@@ -373,19 +375,15 @@ export const getLikedSnippets = asyncHandler(async (req, res) => {
 
     const totalSnippets = await Snippets.countDocuments(query);
 
-    if (!snippets || snippets.length === 0) {
-      return res.status(404).json({ message: "No liked snippets found." });
-    }
-
     return res.status(200).json({
-      snippets,
       totalSnippets,
       totalPages: Math.ceil(totalSnippets / limit),
       currentPage: page,
+      snippets,
     });
   } catch (error) {
-    console.error("Error in getLikedSnippets:", error);
-    res.status(500).json({ message: "Internal Server Error." });
+    console.log("Error in getLikedSnippets", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 

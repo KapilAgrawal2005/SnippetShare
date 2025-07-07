@@ -205,7 +205,11 @@ export const SnippetsProvider = ({ children }) => {
 
   const likeSnippet = async (id) => {
     try {
-      await axios.patch(`${serverUrl}/snippet/like/${id}`);
+      const res = await axios.patch(`${serverUrl}/snippet/like/${id}`);
+      if (res.data.message) {
+        toast.success(res.data.message);
+      }
+      await getLikedSnippets();
     } catch (error) {
       console.log("Error liking snippet", error);
       toast.error(error.response.data.message);

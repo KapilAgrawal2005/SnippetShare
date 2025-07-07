@@ -80,6 +80,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
     deleteSnippet,
     likeSnippet,
     getPublicSnippets,
+    getLikedSnippets,
   } = useSnippetContext();
 
   const { openModalForEdit } = useGlobalContext();
@@ -111,6 +112,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
     setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
 
     await likeSnippet(snippet._id);
+    await getLikedSnippets();
   };
 
   const copyToClipboard = async () => {
