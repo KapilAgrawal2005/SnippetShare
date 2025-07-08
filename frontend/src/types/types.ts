@@ -23,6 +23,7 @@ interface ISnippet {
   description: string;
   language: string;
   tags: ITag[];
+  likes?: number;
   likedBy: string[];
   user: IUser;
   createdAt: string;

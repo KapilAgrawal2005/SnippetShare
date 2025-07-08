@@ -221,8 +221,45 @@ export const SnippetsProvider = ({ children }) => {
       toast.error(
         error.response?.data?.message || "Failed to update like status."
       );
-      throw error; 
+      throw error;
     }
+  };
+
+  // Helper function to update snippet in arrays
+  const updateSnippetInArrays = (snippetId, updateFn) => {
+    // Update public snippets
+    setPublicSnippets((prevSnippets) =>
+      prevSnippets.map((snippet) =>
+        snippet._id === snippetId ? updateFn(snippet) : snippet
+      )
+    );
+
+    // Update user snippets
+    setUserSnippets((prevData) => ({
+      ...prevData,
+      snippets:
+        prevData.snippets?.map((snippet) =>
+          snippet._id === snippetId ? updateFn(snippet) : snippet
+        ) || [],
+    }));
+
+    // Update popular snippets
+    setPopularSnippets((prevData) => ({
+      ...prevData,
+      snippets:
+        prevData.snippets?.map((snippet) =>
+          snippet._id === snippetId ? updateFn(snippet) : snippet
+        ) || [],
+    }));
+
+    // Update liked snippets
+    setLikedSnippets((prevData) => ({
+      ...prevData,
+      snippets:
+        prevData.snippets?.map((snippet) =>
+          snippet._id === snippetId ? updateFn(snippet) : snippet
+        ) || [],
+    }));
   };
 
   const deleteSnippet = async (id) => {
@@ -349,6 +386,7 @@ export const SnippetsProvider = ({ children }) => {
         updateSnippet,
         deleteSnippet,
         likeSnippet,
+        updateSnippetInArrays,
         getPublicSnippetById,
         loading,
         getUserSnippets,

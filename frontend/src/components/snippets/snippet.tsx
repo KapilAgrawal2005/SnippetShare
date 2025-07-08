@@ -79,7 +79,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
     useTagColorMemo,
     deleteSnippet,
     likeSnippet,
-    getPublicSnippets,
+    updateSnippetInArrays,
     getLikedSnippets,
   } = useSnippetContext();
 
@@ -96,15 +96,8 @@ function Snippet({ snippet, height = "400px" }: Props) {
     setIsLiked(userId ? snippet.likedBy.includes(userId) : false);
     setLikeCount(snippet.likedBy.length);
   }, [snippet.likedBy, userId, snippet._id]);
-  const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const codeString = `${snippet?.code}`;
-
-  useEffect(() => {
-    if (activeTag) {
-      getPublicSnippets("", activeTag);
-    }
-  }, [activeTag]);
 
   // handle like/unlike snippet
   const handleLike = async () => {
@@ -118,7 +111,7 @@ function Snippet({ snippet, height = "400px" }: Props) {
     try {
       await likeSnippet(snippet._id);
 
-      // Update UI based on the response
+      // Update local state
       if (wasLiked) {
         setIsLiked(false);
         setLikeCount((prev) => Math.max(0, prev - 1));
@@ -127,6 +120,18 @@ function Snippet({ snippet, height = "400px" }: Props) {
         setLikeCount((prev) => prev + 1);
       }
 
+      // Update the snippet in all arrays efficiently
+      updateSnippetInArrays(snippet._id, (snippetToUpdate: ISnippet) => ({
+        ...snippetToUpdate,
+        likedBy: wasLiked
+          ? snippetToUpdate.likedBy.filter((id: string) => id !== userId)
+          : [...snippetToUpdate.likedBy, userId],
+        likes: wasLiked
+          ? Math.max(0, snippetToUpdate.likes || 0) - 1
+          : (snippetToUpdate.likes || 0) + 1,
+      }));
+
+      // Only refresh favorites to ensure consistency
       await getLikedSnippets();
     } catch (error) {
       console.error("Failed to update like status:", error);
@@ -240,7 +245,9 @@ function Snippet({ snippet, height = "400px" }: Props) {
                   key={tag._id}
                   className="tag-item px-4 py-1 border border-[#ffffff1a] text-gray-300 rounded-md cursor-pointer"
                   style={{ background: useTagColorMemo }}
-                  onClick={() => setActiveTag(tag._id)}
+                  onClick={() => {
+                    /* Tag filtering would be handled at page level */
+                  }}
                 >
                   {tag.name}
                 </li>
