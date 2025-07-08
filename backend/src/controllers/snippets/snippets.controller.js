@@ -308,23 +308,37 @@ export const likeSnippet = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Snippet not found." });
     }
 
-    if (snippet.likedBy.includes(userId)) {
+    // Convert userId to string for consistent comparison
+    const userIdString = userId.toString();
+
+    // Check if user has already liked this snippet
+    const hasLiked = snippet.likedBy.some(
+      (like) => like.toString() === userIdString
+    );
+
+    if (hasLiked) {
       // User already liked the snippet, so we remove the like
       snippet.likes = Math.max(0, snippet.likes - 1);
       snippet.likedBy = snippet.likedBy.filter(
-        (like) => like.toString() !== userId
+        (like) => like.toString() !== userIdString
       );
-      console.log(snippet.likes);
+      console.log(
+        `User ${userIdString} unliked snippet ${snippetId}. New likes count: ${snippet.likes}`
+      );
       await snippet.save();
 
       return res.status(200).json({
         likes: snippet.likes,
+        message: "Snippet has been unliked.",
       });
     } else {
       // User has not liked the snippet, so we add the like
       snippet.likes += 1;
       snippet.likedBy.push(userId);
 
+      console.log(
+        `User ${userIdString} liked snippet ${snippetId}. New likes count: ${snippet.likes}`
+      );
       await snippet.save();
 
       return res.status(200).json({

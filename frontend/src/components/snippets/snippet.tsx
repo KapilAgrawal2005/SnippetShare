@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSnippetContext } from "@/context/snippetContext";
 import { ISnippet, ITag } from "@/types/types";
 import { formatDate } from "@/utils/dates";
@@ -87,12 +87,16 @@ function Snippet({ snippet, height = "400px" }: Props) {
 
   const router = useRouter();
 
-  // check if current user has liked the snippet
-  const [isLiked, setIsLiked] = React.useState(
-    snippet.likedBy.includes(userId)
+  const [isLiked, setIsLiked] = useState(
+    userId ? snippet.likedBy.includes(userId) : false
   );
-  const [likeCount, setLikeCount] = React.useState(snippet.likedBy.length);
-  const [activeTag, setActiveTag] = React.useState<string | null>(null);
+  const [likeCount, setLikeCount] = useState(snippet.likedBy.length);
+
+  useEffect(() => {
+    setIsLiked(userId ? snippet.likedBy.includes(userId) : false);
+    setLikeCount(snippet.likedBy.length);
+  }, [snippet.likedBy, userId, snippet._id]);
+  const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const codeString = `${snippet?.code}`;
 
@@ -108,11 +112,25 @@ function Snippet({ snippet, height = "400px" }: Props) {
       return router.push("/login");
     }
 
-    setIsLiked((prev) => !prev);
-    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+    // Store the current liked state before toggling
+    const wasLiked = isLiked;
 
-    await likeSnippet(snippet._id);
-    await getLikedSnippets();
+    try {
+      await likeSnippet(snippet._id);
+
+      // Update UI based on the response
+      if (wasLiked) {
+        setIsLiked(false);
+        setLikeCount((prev) => Math.max(0, prev - 1));
+      } else {
+        setIsLiked(true);
+        setLikeCount((prev) => prev + 1);
+      }
+
+      await getLikedSnippets();
+    } catch (error) {
+      console.error("Failed to update like status:", error);
+    }
   };
 
   const copyToClipboard = async () => {

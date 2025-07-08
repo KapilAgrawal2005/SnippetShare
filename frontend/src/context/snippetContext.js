@@ -205,14 +205,23 @@ export const SnippetsProvider = ({ children }) => {
 
   const likeSnippet = async (id) => {
     try {
-      const res = await axios.patch(`${serverUrl}/snippet/like/${id}`);
+      const res = await axios.patch(
+        `${serverUrl}/snippet/like/${id}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.message) {
         toast.success(res.data.message);
       }
-      await getLikedSnippets();
+      return res.data;
     } catch (error) {
       console.log("Error liking snippet", error);
-      toast.error(error.response.data.message);
+      toast.error(
+        error.response?.data?.message || "Failed to update like status."
+      );
+      throw error; 
     }
   };
 
