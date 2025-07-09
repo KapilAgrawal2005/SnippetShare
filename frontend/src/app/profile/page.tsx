@@ -4,7 +4,7 @@ import { envelope, github, linkedin } from "@/utils/Icons";
 import Image from "next/image";
 import React from "react";
 import useUserRedirect from "@/hooks/useUserRedirect";
-function page() {
+function Page() {
   useUserRedirect("/login");
   const {
     user,
@@ -19,7 +19,9 @@ function page() {
   const [oldPassword, setOldPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
 
-  const handlePasswordChange = async (e: any) => {
+  const handlePasswordChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.name === "oldPassword") {
       setOldPassword(e.target.value);
     } else {
@@ -238,4 +240,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

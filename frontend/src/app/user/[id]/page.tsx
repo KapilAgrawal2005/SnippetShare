@@ -19,7 +19,7 @@ const Page = () => {
 
   const [snippets, setSnippets] = useState([]);
   const [creatorDetails, setCreatorDetails] = useState({} as IUser);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [activity, setActivity] = useState([]); // Add this state
 
   const creatorId = id?.split("-")?.at(-1) || id;
@@ -36,7 +36,7 @@ const Page = () => {
         console.log("Error fetching activity data", error);
       }
     })();
-  }, [creatorId]);
+  }, [creatorId, getUserActivity]);
 
   useEffect(() => {
     (async () => {
@@ -50,7 +50,7 @@ const Page = () => {
         setIsLoading(false);
       }
     })();
-  }, [creatorId]);
+  }, [creatorId, getUserById]);
 
   useEffect(() => {
     if (creatorId) {
@@ -67,7 +67,7 @@ const Page = () => {
         }
       })();
     }
-  }, [creatorId]);
+  }, [creatorId, getPublicSnippets]);
 
   return (
     <main className="min-h-screen p-4 md:p-8">

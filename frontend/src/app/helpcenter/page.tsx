@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { animateY } from "@/utils/Animations";
 
-const page = () => {
+const Page = () => {
   const faq = [
     {
       question: "What is a snippet?",
@@ -58,9 +58,9 @@ const page = () => {
     },
   ];
 
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggleFaq = (index: any) => {
+  const toggleFaq = (index: number) => {
     // Toggle the open index
     setOpenIndex(openIndex === index ? null : index);
   };
@@ -120,4 +120,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

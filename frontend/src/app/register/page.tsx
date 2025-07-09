@@ -1,5 +1,6 @@
 import React from "react";
 import RegisterForm from "@/components/auth/RegisterForm/RegisterForm";
+import Image from "next/image";
 
 const page = () => {
   return (
@@ -8,10 +9,11 @@ const page = () => {
         {/* Left Side */}
         <div className="flex-1 min-h-full flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#232526] to-[#181818] rounded-none md:rounded-tl-3xl md:rounded-bl-3xl">
           {/* Optional: Glass background image overlay */}
-          <img
+          <Image
             src="/glass-bg.png"
             alt="background glass"
-            className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none select-none"
+            fill
+            className="object-cover opacity-20 pointer-events-none select-none"
           />
           <div className="relative z-10 w-[80%] max-w-xl text-center p-8 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 shadow-xl flex flex-col justify-center items-center">
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg">
