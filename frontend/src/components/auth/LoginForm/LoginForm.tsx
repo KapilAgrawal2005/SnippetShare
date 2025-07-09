@@ -18,7 +18,7 @@ function LoginForm() {
           Login to Your Account
         </h1>
         <p className="mb-8 px-4 text-center text-gray-400 text-[15px]">
-          Login now. Don't have an account?{" "}
+          Login now. Don&apos;t have an account?{" "}
           <a
             href="/register"
             className="font-bold text-[#6EE7B7] hover:text-[#2ECC71] transition-all duration-300"

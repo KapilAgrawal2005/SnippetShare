@@ -1,10 +1,9 @@
 "use client";
 import { useGlobalContext } from "@/context/globalContext";
 import { useSnippetContext } from "@/context/snippetContext";
-import useDetectOutside from "@/hooks/useDetectOutside";
 import { ITag } from "@/types/types";
 import { edit, plus } from "@/utils/Icons";
-import React, { act, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../button/button";
 
 function AddSnippetModal() {
@@ -12,7 +11,7 @@ function AddSnippetModal() {
   const { createSnippet, tags, useTagColorMemo, updateSnippet } =
     useSnippetContext();
 
-  const [activeTags, setActiveTags] = useState([]) as any;
+  const [activeTags, setActiveTags] = useState<ITag[]>([]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -197,7 +196,7 @@ function AddSnippetModal() {
                   type="button"
                   className="py-1 text-white text-sm"
                   style={{
-                    background: activeTags.some((activeTag: any) => {
+                    background: activeTags.some((activeTag: ITag) => {
                       return activeTag._id === tag._id;
                     })
                       ? "#7263f3"

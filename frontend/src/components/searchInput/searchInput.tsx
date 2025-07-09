@@ -25,7 +25,7 @@ const SearchInput = ({ wFull }: Props) => {
   const pathname = usePathname();
 
   const debouncedSearchQuery = useCallback(
-    lodash.debounce((query: string) => {
+    lodash.debounce(function (query: string) {
       if (query) {
         switch (pathname) {
           case "/":
@@ -52,7 +52,15 @@ const SearchInput = ({ wFull }: Props) => {
         }
       }
     }, 500),
-    [pathname]
+    [
+      pathname,
+      getPublicSnippets,
+      getPopularSnippets,
+      getLeaderboard,
+      getLikedSnippets,
+      getUserSnippets,
+      userId,
+    ]
   );
 
   useEffect(() => {
