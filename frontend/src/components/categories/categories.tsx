@@ -70,7 +70,15 @@ const Categories = () => {
       }
     };
     fetchData();
-  }, [pathname, userId, activeTagId]);
+  }, [
+    pathname,
+    userId,
+    activeTagId,
+    getLikedSnippets,
+    getPopularSnippets,
+    getPublicSnippets,
+    getUserSnippets,
+  ]);
 
   return (
     <div className="fixed w-full z-10 mt-3">

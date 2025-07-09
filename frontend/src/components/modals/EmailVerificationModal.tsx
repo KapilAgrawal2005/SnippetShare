@@ -10,7 +10,7 @@ const EmailVerificationModal = () => {
 
   const handleEmailVerification = async () => {
     setLoading(true);
-    const res = await emailVerification();
+    await emailVerification();
     setLoading(false);
     closeModal();
   };

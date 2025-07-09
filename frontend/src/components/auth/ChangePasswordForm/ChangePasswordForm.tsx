@@ -1,6 +1,7 @@
 "use client";
 import { useUserContext } from "@/context/userContext";
 import React, { useState } from "react";
+import Image from "next/image";
 
 function ChangePasswordForm() {
   const { changePassword } = useUserContext();
@@ -10,11 +11,11 @@ function ChangePasswordForm() {
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const currentPasswordChange = (e: any) => {
+  const currentPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentPassword(e.target.value);
   };
 
-  const newPasswordChange = (e: any) => {
+  const newPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
   };
 
@@ -22,7 +23,7 @@ function ChangePasswordForm() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     changePassword(currentPassword, newPassword);
 
@@ -32,7 +33,10 @@ function ChangePasswordForm() {
   };
 
   return (
-    <form className="ml-0 mt-0 m-[2rem] px-10 py-14 rounded-lg bg-white max-w-[520px] w-full">
+    <form
+      onSubmit={handleSubmit}
+      className="ml-0 mt-0 m-[2rem] px-10 py-14 rounded-lg bg-white max-w-[520px] w-full"
+    >
       <div className="relative z-10">
         <h1 className="mb-2 text-center text-[1.35rem] font-medium">
           Reset Your Password!
@@ -90,14 +94,13 @@ function ChangePasswordForm() {
         <div className="flex">
           <button
             type="submit"
-            onClick={handleSubmit}
             className="mt-[1.5rem] flex-1 px-4 py-3 font-bold bg-[#2ECC71] text-white rounded-md hover:bg-[#1abc9c] transition-colors"
           >
             Reset Password
           </button>
         </div>
       </div>
-      <img src="/flurry.png" alt="" />
+      <Image src="/flurry.png" alt="" width={200} height={200} />
     </form>
   );
 }

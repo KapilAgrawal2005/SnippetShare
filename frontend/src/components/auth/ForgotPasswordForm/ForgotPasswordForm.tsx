@@ -9,7 +9,7 @@ const ForgotPasswordForm = () => {
   // state
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     forgotPasswordEmail(email);
 

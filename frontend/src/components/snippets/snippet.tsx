@@ -3,14 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSnippetContext } from "@/context/snippetContext";
 import { ISnippet, ITag } from "@/types/types";
 import { formatDate } from "@/utils/dates";
-import {
-  bookmarkEmpty,
-  copy,
-  edit,
-  heart,
-  heartOutline,
-  trash,
-} from "@/utils/Icons";
+import { copy, edit, heart, heartOutline, trash } from "@/utils/Icons";
 import Image from "next/image";
 import Link from "next/link";
 import SyntaxHighlighter from "react-syntax-highlighter";
