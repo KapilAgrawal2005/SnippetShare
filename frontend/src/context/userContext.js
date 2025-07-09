@@ -1,6 +1,6 @@
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import toast from "react-hot-toast";
 
 const UserContext = React.createContext();
@@ -92,7 +92,7 @@ export const UserContextProvider = ({ children }) => {
   };
 
   // get user Looged in Status
-  const userLoginStatus = async () => {
+  const userLoginStatus = useCallback(async () => {
     let loggedIn = false;
     try {
       const res = await axios.get(`${serverUrl}/api/v1/login-status`, {
@@ -111,7 +111,7 @@ export const UserContextProvider = ({ children }) => {
     }
 
     return loggedIn;
-  };
+  }, [serverUrl, router]);
 
   // logout user
   const logoutUser = async () => {
@@ -324,7 +324,7 @@ export const UserContextProvider = ({ children }) => {
     setLoading(true);
 
     try {
-      const res = await axios.patch(
+      await axios.patch(
         `${serverUrl}/api/v1/change-password`,
         { currentPassword, newPassword },
         {
@@ -376,7 +376,7 @@ export const UserContextProvider = ({ children }) => {
   const deleteUser = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `${serverUrl}/api/v1/admin/users/${id}`,
         {},
         {
@@ -405,7 +405,7 @@ export const UserContextProvider = ({ children }) => {
     };
 
     loginStatusGetUser();
-  }, []);
+  }, [userLoginStatus]);
 
   useEffect(() => {
     if (user.role === "admin") {
@@ -433,6 +433,7 @@ export const UserContextProvider = ({ children }) => {
         allUsers,
         deleteUser,
         getUserActivity,
+        loading,
       }}
     >
       {children}

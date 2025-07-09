@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useCallback,
 } from "react";
 import toast from "react-hot-toast";
 import { useGlobalContext } from "./globalContext";
@@ -28,7 +29,7 @@ export const SnippetsProvider = ({ children }) => {
 
   const createSnippet = async (data) => {
     try {
-      const res = await axios.post(`${serverUrl}/create-snippet`, data);
+      await axios.post(`${serverUrl}/create-snippet`, data);
 
       getPublicSnippets();
 
@@ -53,134 +54,142 @@ export const SnippetsProvider = ({ children }) => {
     }
   };
 
-  const getPublicSnippets = async (userId, tagId, searchQuery, page) => {
-    setLoading(true);
-    try {
-      const queryParams = new URLSearchParams();
+  const getPublicSnippets = useCallback(
+    async (userId, tagId, searchQuery, page) => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams();
 
-      if (userId) {
-        queryParams.append("userId", userId);
-      }
+        if (userId) {
+          queryParams.append("userId", userId);
+        }
 
-      if (tagId) {
-        queryParams.append("tagId", tagId);
-      }
+        if (tagId) {
+          queryParams.append("tagId", tagId);
+        }
 
-      if (searchQuery) {
-        queryParams.append("search", searchQuery);
-      }
+        if (searchQuery) {
+          queryParams.append("search", searchQuery);
+        }
 
-      if (page) {
-        queryParams.append("page", page);
-      }
+        if (page) {
+          queryParams.append("page", page);
+        }
 
-      const res = await axios.get(
-        `${serverUrl}/snippets/public?${queryParams.toString()}`
-      );
+        const res = await axios.get(
+          `${serverUrl}/snippets/public?${queryParams.toString()}`
+        );
 
-      if (res.data && res.data.snippets) {
-        setPublicSnippets(res.data.snippets);
-        setLoading(false);
-        return res.data.snippets;
-      } else {
+        if (res.data && res.data.snippets) {
+          setPublicSnippets(res.data.snippets);
+          setLoading(false);
+          return res.data.snippets;
+        } else {
+          setPublicSnippets([]);
+          setLoading(false);
+          return [];
+        }
+      } catch (error) {
+        console.log("Error fetching public snippets", error);
         setPublicSnippets([]);
         setLoading(false);
         return [];
       }
-    } catch (error) {
-      console.log("Error fetching public snippets", error);
-      setPublicSnippets([]);
-      setLoading(false);
-      return [];
-    }
-  };
+    },
+    [serverUrl]
+  );
 
-  const getUserSnippets = async (tagId, search) => {
-    // Only fetch user snippets if user is logged in
-    if (!userId) {
-      setUserSnippets([]);
-      return [];
-    }
-
-    setLoading(true);
-    try {
-      const queryParams = new URLSearchParams();
-
-      if (tagId) {
-        queryParams.append("tagId", tagId);
+  const getUserSnippets = useCallback(
+    async (tagId, search) => {
+      // Only fetch user snippets if user is logged in
+      if (!userId) {
+        setUserSnippets([]);
+        return [];
       }
 
-      if (search) {
-        queryParams.append("search", search);
-      }
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams();
 
-      const res = await axios.get(
-        `${serverUrl}/snippets?${queryParams.toString()}`,
-        {
-          withCredentials: true,
+        if (tagId) {
+          queryParams.append("tagId", tagId);
         }
-      );
 
-      setLoading(false);
-      setUserSnippets(res.data);
+        if (search) {
+          queryParams.append("search", search);
+        }
 
-      return res.data;
-    } catch (error) {
-      // Handle authentication errors silently
-      if (error.response?.status === 401 || error.response?.status === 404) {
+        const res = await axios.get(
+          `${serverUrl}/snippets?${queryParams.toString()}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        setLoading(false);
+        setUserSnippets(res.data);
+
+        return res.data;
+      } catch (error) {
+        // Handle authentication errors silently
+        if (error.response?.status === 401 || error.response?.status === 404) {
+          setUserSnippets([]);
+          setLoading(false);
+          return [];
+        }
+        console.log("Error fetching user snippets", error);
         setUserSnippets([]);
         setLoading(false);
         return [];
       }
-      console.log("Error fetching user snippets", error);
-      setUserSnippets([]);
-      setLoading(false);
-      return [];
-    }
-  };
+    },
+    [userId, serverUrl]
+  );
 
-  const getLikedSnippets = async (tagId, search) => {
-    // Only fetch liked snippets if user is logged in
-    if (!userId) {
-      setLikedSnippets([]);
-      return [];
-    }
-
-    setLoading(true);
-    try {
-      const queryParams = new URLSearchParams();
-
-      if (tagId) {
-        queryParams.append("tagId", tagId);
+  const getLikedSnippets = useCallback(
+    async (tagId, search) => {
+      // Only fetch liked snippets if user is logged in
+      if (!userId) {
+        setLikedSnippets([]);
+        return [];
       }
 
-      if (search) {
-        queryParams.append("search", search);
-      }
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams();
 
-      const res = await axios.get(
-        `${serverUrl}/snippets/liked?${queryParams.toString()}`,
-        {
-          withCredentials: true,
+        if (tagId) {
+          queryParams.append("tagId", tagId);
         }
-      );
 
-      setLoading(false);
-      setLikedSnippets(res.data);
-      return res.data;
-    } catch (error) {
-      // Handle authentication errors silently
-      if (error.response?.status === 401 || error.response?.status === 404) {
+        if (search) {
+          queryParams.append("search", search);
+        }
+
+        const res = await axios.get(
+          `${serverUrl}/snippets/liked?${queryParams.toString()}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        setLoading(false);
+        setLikedSnippets(res.data);
+        return res.data;
+      } catch (error) {
+        if (error.response?.status === 401 || error.response?.status === 404) {
+          setLikedSnippets([]);
+          setLoading(false);
+          return [];
+        }
+        console.log("Error fetching liked snippets", error);
         setLikedSnippets([]);
         setLoading(false);
         return [];
       }
-      console.log("Error fetching liked snippets", error);
-      setLikedSnippets([]);
-      setLoading(false);
-      return [];
-    }
-  };
+    },
+    [userId, serverUrl]
+  );
 
   const getPublicSnippetById = async (id) => {
     setLoading(true);
@@ -194,14 +203,14 @@ export const SnippetsProvider = ({ children }) => {
     }
   };
 
-  const getTags = async () => {
+  const getTags = useCallback(async () => {
     try {
       const res = await axios.get(`${serverUrl}/tags`);
       setTags(res.data.tags);
     } catch (error) {
       console.log("Error fetching tags", error);
     }
-  };
+  }, [serverUrl]);
 
   const likeSnippet = async (id) => {
     try {
@@ -275,7 +284,7 @@ export const SnippetsProvider = ({ children }) => {
   };
 
   // get leaderboard
-  const getLeaderboard = async () => {
+  const getLeaderboard = useCallback(async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${serverUrl}/leaderboard`);
@@ -287,35 +296,38 @@ export const SnippetsProvider = ({ children }) => {
     } catch (error) {
       console.log("Error fetching leaderboard", error);
     }
-  };
+  }, [serverUrl]);
 
   // popular snippets
-  const getPopularSnippets = async (tagId, search) => {
-    setLoading(true);
-    try {
-      const queryParams = new URLSearchParams();
+  const getPopularSnippets = useCallback(
+    async (tagId, search) => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams();
 
-      if (tagId) {
-        queryParams.append("tagId", tagId);
+        if (tagId) {
+          queryParams.append("tagId", tagId);
+        }
+
+        if (search) {
+          queryParams.append("search", search);
+        }
+
+        const res = await axios.get(
+          `${serverUrl}/snippets/popular?${queryParams.toString()}`
+        );
+
+        setLoading(false);
+
+        setPopularSnippets(res.data);
+
+        return res.data;
+      } catch (error) {
+        console.log("Error fetching popular snippets", error);
       }
-
-      if (search) {
-        queryParams.append("search", search);
-      }
-
-      const res = await axios.get(
-        `${serverUrl}/snippets/popular?${queryParams.toString()}`
-      );
-
-      setLoading(false);
-
-      setPopularSnippets(res.data);
-
-      return res.data;
-    } catch (error) {
-      console.log("Error fetching popular snippets", error);
-    }
-  };
+    },
+    [serverUrl]
+  );
 
   const gradients = {
     buttonGradient1:
@@ -359,8 +371,8 @@ export const SnippetsProvider = ({ children }) => {
     ];
 
   // memo
-  const useBtnColorMemo = useMemo(() => randomButtonColor, []);
-  const useTagColorMemo = useMemo(() => randomTagColor, []);
+  const useBtnColorMemo = useMemo(() => randomButtonColor, [randomButtonColor]);
+  const useTagColorMemo = useMemo(() => randomTagColor, [randomTagColor]);
 
   useEffect(() => {
     getPublicSnippets();
@@ -372,7 +384,15 @@ export const SnippetsProvider = ({ children }) => {
       getUserSnippets();
       getLikedSnippets();
     }
-  }, [userId]);
+  }, [
+    userId,
+    getPublicSnippets,
+    getTags,
+    getLeaderboard,
+    getPopularSnippets,
+    getUserSnippets,
+    getLikedSnippets,
+  ]);
 
   return (
     <SnippetsContext.Provider
