@@ -25,14 +25,14 @@ const Home = () => {
     }
   };
 
-  const fetchSnippets = async () => {
-    await getPublicSnippets("", "", "", currentPage);
-    await getTags();
-  };
-
   useEffect(() => {
+    const fetchSnippets = async () => {
+      await getPublicSnippets("", "", "", currentPage);
+      await getTags();
+    };
+
     fetchSnippets();
-  }, [currentPage]);
+  }, [currentPage, getPublicSnippets, getTags]);
 
   return (
     <div>

@@ -11,7 +11,7 @@ interface LocalUser extends IUser {
   score: number;
 }
 
-function page() {
+function Page() {
   const { leaderboard } = useSnippetContext();
 
   const router = useRouter();
@@ -109,4 +109,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

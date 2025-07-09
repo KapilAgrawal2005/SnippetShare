@@ -7,7 +7,7 @@ import Categories from "@/components/categories/categories";
 import Snippet from "@/components/snippets/snippet";
 import { ISnippet } from "@/types/types";
 
-function page() {
+function Page() {
   useUserRedirect("/login");
   const userId = useUserContext().user._id;
   const { getLikedSnippets, likedSnippets } = useSnippetContext();
@@ -16,7 +16,7 @@ function page() {
     if (userId) {
       getLikedSnippets();
     }
-  }, [userId]);
+  }, [userId, getLikedSnippets]);
 
   return (
     <main>
@@ -37,4 +37,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

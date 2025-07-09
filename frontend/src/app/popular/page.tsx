@@ -6,7 +6,7 @@ import { useSnippetContext } from "@/context/snippetContext";
 import { ISnippet } from "@/types/types";
 import React from "react";
 
-function page() {
+function Page() {
   const { popularSnippets, loading } = useSnippetContext();
 
   console.log("Popular Snippets:", popularSnippets);
@@ -33,4 +33,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

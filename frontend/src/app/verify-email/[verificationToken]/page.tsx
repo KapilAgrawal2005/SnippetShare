@@ -4,19 +4,27 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface Props {
-  params: {
+  params: Promise<{
     verificationToken: string;
-  };
+  }>;
 }
 
-const page = ({ params }: Props) => {
-  const { verificationToken } = params;
+const Page = ({ params }: Props) => {
+  const [verificationToken, setVerificationToken] = useState<string>("");
   const router = useRouter();
   const { verifyUser } = useUserContext();
   const [verificationStatus, setVerificationStatus] = useState<
     "loading" | "success" | "error"
   >("loading");
-  const [message, setMessage] = useState("");
+  const [message] = useState("");
+
+  useEffect(() => {
+    const getParams = async () => {
+      const resolvedParams = await params;
+      setVerificationToken(resolvedParams.verificationToken);
+    };
+    getParams();
+  }, [params]);
 
   useEffect(() => {
     const handleVerification = async () => {
@@ -39,7 +47,7 @@ const page = ({ params }: Props) => {
     if (verificationToken) {
       handleVerification();
     }
-  }, []);
+  }, [router, verificationToken, verifyUser]);
 
   return (
     <div className="min-h-[100vh] flex flex-col justify-center items-center bg-[#1a1a1a]">
@@ -114,4 +122,4 @@ const page = ({ params }: Props) => {
   );
 };
 
-export default page;
+export default Page;

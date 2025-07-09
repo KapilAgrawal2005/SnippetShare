@@ -8,7 +8,7 @@ import { ISnippet } from "@/types/types";
 import useUserRedirect from "@/hooks/useUserRedirect";
 import React, { useEffect } from "react";
 
-const page = () => {
+const Page = () => {
   useUserRedirect("/login");
   const { getUserSnippets, userSnippets, loading } = useSnippetContext();
   const userId = useUserContext().user?._id;
@@ -17,7 +17,7 @@ const page = () => {
     if (userId) {
       getUserSnippets();
     }
-  }, [userId]);
+  }, [userId, getUserSnippets]);
 
   return (
     <main>
@@ -41,4 +41,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

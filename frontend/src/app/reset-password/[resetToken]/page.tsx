@@ -1,34 +1,46 @@
 "use client";
 import { useUserContext } from "@/context/userContext";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff, FiLock } from "react-icons/fi";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Props {
-  params: {
+  params: Promise<{
     resetToken: string;
-  };
+  }>;
 }
 
-const page = ({ params: { resetToken } }: Props) => {
+const Page = ({ params }: Props) => {
   const { resetPassword } = useUserContext();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [resetToken, setResetToken] = useState<string>("");
 
-  const handlePasswordChange = (e: any) => {
+  useEffect(() => {
+    const getParams = async () => {
+      const resolvedParams = await params;
+      setResetToken(resolvedParams.resetToken);
+    };
+    getParams();
+  }, [params]);
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleConfirmPasswordChange = (e: any) => {
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setConfirmPassword(e.target.value);
   };
 
   // handle submit
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
@@ -45,7 +57,13 @@ const page = ({ params: { resetToken } }: Props) => {
         style={{ boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.25)" }}
       >
         {/* Logo/Icon */}
-        <img src="/logo.png" alt="Logo" className="w-14 h-14 mb-2" />
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={56}
+          height={56}
+          className="mb-2"
+        />
         <h1 className="text-2xl font-extrabold text-white tracking-wide mb-1 text-center drop-shadow-lg">
           Reset your password
         </h1>
@@ -132,4 +150,4 @@ const page = ({ params: { resetToken } }: Props) => {
   );
 };
 
-export default page;
+export default Page;
