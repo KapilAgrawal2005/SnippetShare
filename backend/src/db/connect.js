@@ -10,7 +10,7 @@ const connect = async () => {
     console.log("Connected to database.....");
   } catch (error) {
     console.log("Failed to connect to database.....", error.message);
-    process.exit(1);
+    throw error; // Don't exit process in serverless environment
   }
 };
 

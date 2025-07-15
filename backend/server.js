@@ -35,11 +35,6 @@ app.use("/api/v1", userRoutes);
 app.use("/api/v1", snippetsRoutes);
 app.use("/api/v1", tagsRoutes);
 
-// Add a health check route
-app.get("/", (req, res) => {
-  res.json({ message: "Server is running!" });
-});
-
 const server = async () => {
   try {
     await connect();
